@@ -15,6 +15,11 @@ final class BottomOrderScreenView: UIView {
     private let salePriceLabelColorsProperties: UIColor = UIColor(red: 255.0 / 255.0, green: 70.0 / 255.0, blue: 17.0 / 255.0, alpha: 1)
     private let promocodesPriceLabelColorsProperties: UIColor = UIColor(red: 0.0 / 255.0, green: 183.0 / 255.0, blue: 117.0 / 255.0, alpha: 1)
     
+    private var totalSumMain = 0.0
+    private var totalSum = 0.0
+    private var countOfChoosenPromocodes = 0
+    private var previousDiscount = 0.0
+    
     private lazy var priceForTwoProductsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -159,21 +164,53 @@ final class BottomOrderScreenView: UIView {
         let productsCount = data.products.count
         let productText = getCorrectProductText(for: productsCount)
         priceForTwoProductsLabel.text = "Цена за \(productsCount) \(productText)"
-        var totalSum = 0.0
         data.products.forEach {
-           totalSum += $0.price
+           totalSumMain += $0.price
         }
-        if totalSum <= 0.0 {
+        
+        promocodesPriceLabel.text = "\(Int(data.paymentDiscount ?? 0)) ₽"
+        
+        let payment = data.paymentDiscount ?? 0 + (data.baseDiscount ?? 0)
+        
+        paymentPriceLabel.text = "\(Int(payment)) ₽"
+        
+        totalPriceLabel.text = "\(Int(totalSumMain)) ₽"
+        
+        if totalSumMain <= 0.0 {
             priceLabel.text = "-"
         } else {
-            priceLabel.text = "\(Int(totalSum)) ₽"
+            priceLabel.text = "\(Int(totalSumMain)) ₽"
         }
+        totalSum = totalSumMain
+        
         data.products.forEach {
             if $0.price < data.baseDiscount ?? 0 {
                 salePriceLabel.text = "0 ₽"
             } else {
                 salePriceLabel.text = "\(Int(data.baseDiscount ?? 0)) ₽"
             }
+        }
+    }
+    
+    func updateDiscountSale(discount: Int, order: Order, isOn: Bool) {
+        if isOn && countOfChoosenPromocodes == 0 {
+            let totalDiscount = (totalSum * Double(discount)) / 100
+            totalSum -= totalDiscount
+            if countOfChoosenPromocodes == 2 {
+                previousDiscount = totalDiscount
+                
+            } else {
+                promocodesPriceLabel.text = "\(Int(totalDiscount)) ₽"
+                totalPriceLabel.text = "\(Int(totalSum)) ₽"
+                countOfChoosenPromocodes += 1
+            }
+        }
+        
+        
+        else {
+            totalSum = totalSumMain
+            totalPriceLabel.text = "\(Int(totalSumMain)) ₽"
+            promocodesPriceLabel.text = "\(Int(order.paymentDiscount ?? 0)) ₽"
         }
     }
     

@@ -16,8 +16,6 @@ final class PromocodesTableViewCell: UITableViewCell {
     
     private var switchHandler : ((Bool) -> Void)?
     
-    private var titleLabelConstraint: NSLayoutConstraint?
-    
     static let identifer = String(describing: PromocodesTableViewCell.self)
     
     private lazy var contentViewCell: UIView = {
@@ -156,6 +154,10 @@ final class PromocodesTableViewCell: UITableViewCell {
             stackViewContent.arrangedSubviews[1].isHidden = true
         }
         promocodeActivationSwitch.isOn = order.active
+    }
+    
+    func getDiscount(_ order: [Order.Promocode], indexPath: Int) -> Int {
+        return order[indexPath].percent
     }
 }
 

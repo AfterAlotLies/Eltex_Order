@@ -33,6 +33,7 @@ class SaleView: UIView {
     func configureLabel(text: Int) {
         saleLabel.text = "-\(text)%"
     }
+    
 }
 
 private extension SaleView {

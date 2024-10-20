@@ -28,7 +28,7 @@ final class OrderScreenViewController: UIViewController {
                                                                           percent: 5,
                                                                           endDate: Date(),
                                                                           info: "Промокод действует на первый заказ в приложении",
-                                                                          active: true),
+                                                                          active: false),
                                                      Order.Promocode.init(title: "VESNA23",
                                                                           percent: 5,
                                                                           endDate: Date(),
@@ -38,7 +38,7 @@ final class OrderScreenViewController: UIViewController {
                                                                           percent: 5,
                                                                           endDate: Date(),
                                                                           info: nil,
-                                                                          active: true),
+                                                                          active: false),
                                                      Order.Promocode.init(title: "4300162112534",
                                                                           percent: 5,
                                                                           endDate: Date(),
@@ -49,7 +49,7 @@ final class OrderScreenViewController: UIViewController {
                                                                           endDate: Date(),
                                                                           info: nil,
                                                                           active: false)],
-                                        products: [Order.Product.init(price: 30.0, title: "Продукты")],
+                                        products: [Order.Product.init(price: 30000.0, title: "Продукты")],
                                         paymentDiscount: 3000.0,
                                         baseDiscount: 10.0))
     }

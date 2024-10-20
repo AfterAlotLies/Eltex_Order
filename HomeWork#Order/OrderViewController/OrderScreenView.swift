@@ -201,15 +201,20 @@ private extension OrderScreenView {
     }
     
     func handleSwitch(_ isOn: Bool, indexPath: Int, cell: PromocodesTableViewCell) {
+        guard let order = order else { return }
         if isOn {
             if countOfChoosenPromocodes < 2 {
                 countOfChoosenPromocodes += 1
+                let choosenPromocode = cell.getDiscount(order.promocodes, indexPath: indexPath)
+                bottomOrderView.updateDiscountSale(discount: choosenPromocode, order: order, isOn: true)
             } else {
                 delegate?.showErrorMessage(errorTitle: "Что-то пошло не так...", errorMessage: "Вы не можете активировать более 2-х промокодов одновременно")
                 cell.turnOffSwitch()
             }
         } else {
             countOfChoosenPromocodes -= 1
+            let choosenPromocode = cell.getDiscount(order.promocodes, indexPath: indexPath)
+            bottomOrderView.updateDiscountSale(discount: choosenPromocode, order: order, isOn: false)
         }
     }
     
