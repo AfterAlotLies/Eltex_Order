@@ -20,18 +20,19 @@ final class BottomOrderScreenView: UIView {
         static let topAnchorMargin: CGFloat = 16
         static let leadingAnchorMargin: CGFloat = 26
         static let trailingAnchorMargin: CGFloat = -26
+        static let fontLabelSize: CGFloat = 14
     }
     
-    private lazy var priceForTwoProductsLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14))
-    private lazy var saleLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textLabel: Constants.saleLabelText)
-    private lazy var promocodesLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textLabel: Constants.promocodesLabelText)
-    private lazy var paymentLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textLabel: Constants.paymentLabelText)
-    private lazy var priceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14))
-    private lazy var salePriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textColor: UIColorProperties.salePriceLabelColorsProperties)
-    private lazy var promocodesPriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textColor: UIColorProperties.promocodesPriceLabelColorsProperties)
-    private lazy var paymentPriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14))
+    private lazy var priceForTwoProductsLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: Constants.fontLabelSize))
+    private lazy var saleLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: Constants.fontLabelSize), textLabel: Constants.saleLabelText)
+    private lazy var promocodesLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: Constants.fontLabelSize), textLabel: Constants.promocodesLabelText)
+    private lazy var paymentLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: Constants.fontLabelSize), textLabel: Constants.paymentLabelText)
+    private lazy var priceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: Constants.fontLabelSize))
+    private lazy var salePriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: Constants.fontLabelSize), textColor: UIColorProperties.salePriceLabelColorsProperties)
+    private lazy var promocodesPriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: Constants.fontLabelSize), textColor: UIColorProperties.promocodesPriceLabelColorsProperties)
+    private lazy var paymentPriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: Constants.fontLabelSize))
     private lazy var totalLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 18), textLabel: Constants.totalLabelText)
-    private lazy var totalPriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14))
+    private lazy var totalPriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: Constants.fontLabelSize))
     
     private lazy var promocodeInfoButton: UIButton = {
         let button = UIButton()
