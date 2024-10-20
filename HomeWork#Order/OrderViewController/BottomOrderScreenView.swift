@@ -10,83 +10,34 @@ import UIKit
 
 final class BottomOrderScreenView: UIView {
     
-    private let viewBackground: UIColor = UIColor(red: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1)
-    private let makeAnOrderButtonColorsProperties: UIColor = UIColor(red: 255.0 / 255.0, green: 70.0 / 255.0, blue: 17.0 / 255.0, alpha: 1)
-    private let salePriceLabelColorsProperties: UIColor = UIColor(red: 255.0 / 255.0, green: 70.0 / 255.0, blue: 17.0 / 255.0, alpha: 1)
-    private let promocodesPriceLabelColorsProperties: UIColor = UIColor(red: 0.0 / 255.0, green: 183.0 / 255.0, blue: 117.0 / 255.0, alpha: 1)
+    private enum Constants {
+        static let saleLabelText = "Скидки"
+        static let promocodesLabelText = "Промокоды"
+        static let promocodeInfoButtonImage = UIImage(named: "info_circle")
+        static let paymentLabelText = "Способ оплаты"
+        static let totalLabelText = "Итого"
+        static let makeAnOrderButtonTitle = "Оформить заказ"
+        static let topAnchorMargin: CGFloat = 16
+        static let leadingAnchorMargin: CGFloat = 26
+        static let trailingAnchorMargin: CGFloat = -26
+    }
     
-    private var totalSumMain = 0.0
-    private var totalSum = 0.0
-    private var activePromocodes: [Order.Promocode] = []
-    private var fixedDiscount: Double = 0.0
-    private var paymentDiscount: Double = 0.0
-    
-    private lazy var priceForTwoProductsLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14)
-        return label
-    }()
-    
-    private lazy var saleLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Скидки"
-        label.font = UIFont.systemFont(ofSize: 14)
-        return label
-    }()
-    
-    private lazy var promocodesLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Промокоды"
-        label.font = UIFont.systemFont(ofSize: 14)
-        return label
-    }()
+    private lazy var priceForTwoProductsLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14))
+    private lazy var saleLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textLabel: Constants.saleLabelText)
+    private lazy var promocodesLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textLabel: Constants.promocodesLabelText)
+    private lazy var paymentLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textLabel: Constants.paymentLabelText)
+    private lazy var priceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14))
+    private lazy var salePriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textColor: UIColorProperties.salePriceLabelColorsProperties)
+    private lazy var promocodesPriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14), textColor: UIColorProperties.promocodesPriceLabelColorsProperties)
+    private lazy var paymentPriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14))
+    private lazy var totalLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 18), textLabel: Constants.totalLabelText)
+    private lazy var totalPriceLabel: UILabel = createLabel(fontSize: UIFont.systemFont(ofSize: 14))
     
     private lazy var promocodeInfoButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "info_circle"), for: .normal)
+        button.setImage(Constants.promocodeInfoButtonImage, for: .normal)
         return button
-    }()
-    
-    private lazy var paymentLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Способы оплаты"
-        label.font = UIFont.systemFont(ofSize: 14)
-        return label
-    }()
-    
-    private lazy var priceLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14)
-        return label
-    }()
-    
-    private lazy var salePriceLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = salePriceLabelColorsProperties
-        return label
-    }()
-    
-    private lazy var promocodesPriceLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.textColor = promocodesPriceLabelColorsProperties
-        return label
-    }()
-    
-    private lazy var paymentPriceLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14)
-        return label
     }()
     
     private lazy var dividerView: UIView = {
@@ -96,27 +47,12 @@ final class BottomOrderScreenView: UIView {
         return view
     }()
     
-    private lazy var totalLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Итого"
-        label.font = UIFont.systemFont(ofSize: 18)
-        return label
-    }()
-    
-    private lazy var totalPriceLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14)
-        return label
-    }()
-    
     private lazy var makeAnOrderButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Оформить заказ", for: .normal)
+        button.setTitle(Constants.makeAnOrderButtonTitle, for: .normal)
         button.tintColor = .white
-        button.backgroundColor = makeAnOrderButtonColorsProperties
+        button.backgroundColor = UIColorProperties.makeAnOrderButtonColorsProperties
         button.layer.cornerRadius = 10
         return button
     }()
@@ -145,6 +81,12 @@ final class BottomOrderScreenView: UIView {
         return label
     }()
     
+    private var totalSumMain = 0.0
+    private var totalSum = 0.0
+    private var activePromocodes: [Order.Promocode] = []
+    private var fixedDiscount: Double = 0.0
+    private var paymentDiscount: Double = 0.0
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -154,6 +96,10 @@ final class BottomOrderScreenView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+}
+
+extension BottomOrderScreenView {
     
     func setData(_ data: Order) {
         totalSumMain = data.products.reduce(0) { $0 + $1.price }
@@ -167,9 +113,10 @@ final class BottomOrderScreenView: UIView {
             }
         }
         
-        priceLabel.text = "\(Int(totalSumMain)) ₽"
-        salePriceLabel.text = "- \(Int(fixedDiscount)) ₽"
-        paymentPriceLabel.text = "- \(Int(paymentDiscount)) ₽"
+        priceLabel.text = "\(formatPrice(Int(totalSum))) ₽"
+        salePriceLabel.text = "- \(formatPrice(Int(fixedDiscount))) ₽"
+        paymentPriceLabel.text = "- \(formatPrice(Int(paymentDiscount))) ₽"
+        priceForTwoProductsLabel.text = "Цена за \(data.products.count) \(getCorrectProductText(for: data.products.count))"
         
         recalculateTotalSum()
         updateUI()
@@ -186,10 +133,35 @@ final class BottomOrderScreenView: UIView {
         recalculateTotalSum()
         updateUI()
     }
-    
 }
 
 private extension BottomOrderScreenView {
+    
+    func formatPrice(_ price: Int) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.groupingSeparator = " "
+        numberFormatter.maximumFractionDigits = 0
+        
+        if let formattedPrice = numberFormatter.string(from: NSNumber(value: price)) {
+            return formattedPrice
+        }
+        
+        return "\(price)"
+    }
+    
+    func createLabel(fontSize: UIFont, textLabel: String?=nil, textColor: UIColor?=nil) -> UILabel {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = fontSize
+        if let textLabel = textLabel {
+            label.text = textLabel
+        }
+        if let textColor = textColor {
+            label.textColor = textColor
+        }
+        return label
+    }
     
     func recalculateTotalSum() {
         var discountSum: Double = 0.0
@@ -203,21 +175,21 @@ private extension BottomOrderScreenView {
         
         totalSum = totalSumMain - discountSum - fixedDiscount - paymentDiscount
         
-        promocodesPriceLabel.text = "- \(totalDiscountPercent) ₽"
+        promocodesPriceLabel.text = "- \(formatPrice(totalDiscountPercent)) ₽"
     }
     
     func updateUI() {
-        totalPriceLabel.text = "\(Int(totalSum)) ₽"
+        totalPriceLabel.text = "\(formatPrice(Int(totalSum))) ₽"
     }
     
     func getCorrectProductText(for count: Int) -> String {
         let lastDigit = count % 10
         let lastTwoDigits = count % 100
-
+        
         if (11...14).contains(lastTwoDigits) {
             return "товаров"
         }
-
+        
         switch lastDigit {
         case 1:
             return "товар"
@@ -229,7 +201,7 @@ private extension BottomOrderScreenView {
     }
     
     func setupView() {
-        backgroundColor = viewBackground
+        backgroundColor = UIColorProperties.grayBackgroundColor
         
         addSubview(priceForTwoProductsLabel)
         addSubview(saleLabel)
@@ -256,30 +228,30 @@ private extension BottomOrderScreenView {
     
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            priceForTwoProductsLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-            priceForTwoProductsLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
+            priceForTwoProductsLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.topAnchorMargin),
+            priceForTwoProductsLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingAnchorMargin),
             priceForTwoProductsLabel.trailingAnchor.constraint(greaterThanOrEqualTo: priceLabel.leadingAnchor, constant: -16)
         ])
         
         NSLayoutConstraint.activate([
-            priceLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
-            priceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26)
+            priceLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: Constants.topAnchorMargin),
+            priceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Constants.trailingAnchorMargin)
         ])
         
         NSLayoutConstraint.activate([
-            saleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
-            saleLabel.topAnchor.constraint(equalTo: priceForTwoProductsLabel.bottomAnchor, constant: 16),
+            saleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingAnchorMargin),
+            saleLabel.topAnchor.constraint(equalTo: priceForTwoProductsLabel.bottomAnchor, constant: Constants.topAnchorMargin),
             saleLabel.trailingAnchor.constraint(greaterThanOrEqualTo: salePriceLabel.leadingAnchor, constant: -16)
         ])
         
         NSLayoutConstraint.activate([
-            salePriceLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 16),
-            salePriceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26)
+            salePriceLabel.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: Constants.topAnchorMargin),
+            salePriceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Constants.trailingAnchorMargin)
         ])
         
         NSLayoutConstraint.activate([
-            promocodesLabel.topAnchor.constraint(equalTo: saleLabel.bottomAnchor, constant: 16),
-            promocodesLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
+            promocodesLabel.topAnchor.constraint(equalTo: saleLabel.bottomAnchor, constant: Constants.topAnchorMargin),
+            promocodesLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingAnchorMargin),
             promocodesLabel.trailingAnchor.constraint(equalTo: promocodeInfoButton.leadingAnchor, constant: -6)
         ])
         
@@ -290,44 +262,44 @@ private extension BottomOrderScreenView {
         ])
         
         NSLayoutConstraint.activate([
-            promocodesPriceLabel.topAnchor.constraint(equalTo: salePriceLabel.bottomAnchor, constant: 16),
-            promocodesPriceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26)
+            promocodesPriceLabel.topAnchor.constraint(equalTo: salePriceLabel.bottomAnchor, constant: Constants.topAnchorMargin),
+            promocodesPriceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Constants.trailingAnchorMargin)
         ])
         
         NSLayoutConstraint.activate([
-            paymentLabel.topAnchor.constraint(equalTo: promocodesLabel.bottomAnchor, constant: 16),
-            paymentLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
+            paymentLabel.topAnchor.constraint(equalTo: promocodesLabel.bottomAnchor, constant: Constants.topAnchorMargin),
+            paymentLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingAnchorMargin),
             paymentLabel.trailingAnchor.constraint(greaterThanOrEqualTo: paymentPriceLabel.leadingAnchor, constant: -16)
         ])
         
         NSLayoutConstraint.activate([
-            paymentPriceLabel.topAnchor.constraint(equalTo: promocodesPriceLabel.bottomAnchor, constant: 16),
-            paymentPriceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26)
+            paymentPriceLabel.topAnchor.constraint(equalTo: promocodesPriceLabel.bottomAnchor, constant: Constants.topAnchorMargin),
+            paymentPriceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Constants.trailingAnchorMargin)
         ])
         
         NSLayoutConstraint.activate([
             dividerView.heightAnchor.constraint(equalToConstant: 1),
-            dividerView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
-            dividerView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26),
+            dividerView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingAnchorMargin),
+            dividerView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Constants.trailingAnchorMargin),
             dividerView.topAnchor.constraint(equalTo: paymentLabel.bottomAnchor, constant: 36)
         ])
         
         NSLayoutConstraint.activate([
-            totalLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 16),
-            totalLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
+            totalLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: Constants.topAnchorMargin),
+            totalLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingAnchorMargin),
             totalLabel.trailingAnchor.constraint(greaterThanOrEqualTo: totalPriceLabel.leadingAnchor, constant: -16)
         ])
         
         NSLayoutConstraint.activate([
-            totalPriceLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: 16),
-            totalPriceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26)
+            totalPriceLabel.topAnchor.constraint(equalTo: dividerView.bottomAnchor, constant: Constants.topAnchorMargin),
+            totalPriceLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Constants.trailingAnchorMargin)
         ])
         
         NSLayoutConstraint.activate([
             makeAnOrderButton.heightAnchor.constraint(equalToConstant: 54),
-            makeAnOrderButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
-            makeAnOrderButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26),
-            makeAnOrderButton.topAnchor.constraint(greaterThanOrEqualTo: totalLabel.bottomAnchor, constant: 16)
+            makeAnOrderButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: Constants.leadingAnchorMargin),
+            makeAnOrderButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: Constants.trailingAnchorMargin),
+            makeAnOrderButton.topAnchor.constraint(greaterThanOrEqualTo: totalLabel.bottomAnchor, constant: Constants.topAnchorMargin)
         ])
         
         NSLayoutConstraint.activate([

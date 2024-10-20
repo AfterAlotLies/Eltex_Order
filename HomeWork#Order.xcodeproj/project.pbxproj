@@ -18,7 +18,7 @@
 		11143A0E2CC0EC100024C5B7 /* BottomOrderScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A0D2CC0EC100024C5B7 /* BottomOrderScreenView.swift */; };
 		11143A112CC251560024C5B7 /* PromocodesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */; };
 		11143A142CC27CF10024C5B7 /* SaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A132CC27CF10024C5B7 /* SaleView.swift */; };
-		11143A172CC51A660024C5B7 /* UIProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A162CC51A660024C5B7 /* UIProperties.swift */; };
+		11143A172CC51A660024C5B7 /* UIColorProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A162CC51A660024C5B7 /* UIColorProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,7 +35,7 @@
 		11143A0D2CC0EC100024C5B7 /* BottomOrderScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomOrderScreenView.swift; sourceTree = "<group>"; };
 		11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromocodesTableViewCell.swift; sourceTree = "<group>"; };
 		11143A132CC27CF10024C5B7 /* SaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleView.swift; sourceTree = "<group>"; };
-		11143A162CC51A660024C5B7 /* UIProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIProperties.swift; sourceTree = "<group>"; };
+		11143A162CC51A660024C5B7 /* UIColorProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorProperties.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,7 +144,7 @@
 		11143A152CC51A510024C5B7 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
-				11143A162CC51A660024C5B7 /* UIProperties.swift */,
+				11143A162CC51A660024C5B7 /* UIColorProperties.swift */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -221,7 +221,7 @@
 			files = (
 				11143A142CC27CF10024C5B7 /* SaleView.swift in Sources */,
 				111439F32CBFDA3C0024C5B7 /* OrderScreenViewController.swift in Sources */,
-				11143A172CC51A660024C5B7 /* UIProperties.swift in Sources */,
+				11143A172CC51A660024C5B7 /* UIColorProperties.swift in Sources */,
 				11143A0C2CBFEE200024C5B7 /* NavigationController.swift in Sources */,
 				111439EF2CBFDA3C0024C5B7 /* AppDelegate.swift in Sources */,
 				11143A092CBFE63C0024C5B7 /* OrderScreenView.swift in Sources */,

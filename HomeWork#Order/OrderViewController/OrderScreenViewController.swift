@@ -9,18 +9,40 @@ import UIKit
 
 final class OrderScreenViewController: UIViewController {
     
+    private enum Constants {
+        static let controllerTitle = "Оформление заказа"
+        static let alertOkButtonTitle = "OK"
+    }
+    
     private lazy var orderScreenView: OrderScreenView = {
         let view = OrderScreenView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.delegate = self
         return view
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupController()
         setData()
     }
+    
+}
+
+extension OrderScreenViewController: IOrderScreenView {
+    
+    func showErrorMessage(errorTitle: String, errorMessage: String) {
+        let alert = UIAlertController(title: errorTitle,
+                                      message: errorMessage,
+                                      preferredStyle: .alert)
+        let okButton = UIAlertAction(title: Constants.alertOkButtonTitle,
+                                     style: .cancel)
+        alert.addAction(okButton)
+        self.present(alert, animated: true)
+    }
+}
+
+extension OrderScreenViewController {
     
     func setData() {
         orderScreenView.showOrder(Order(screenTitle: "Промокоды",
@@ -54,17 +76,6 @@ final class OrderScreenViewController: UIViewController {
                                         paymentDiscount: 1000.0,
                                         baseDiscount: 1000.0))
     }
-
-}
-
-extension OrderScreenViewController: IOrderScreenView {
-    
-    func showErrorMessage(errorTitle: String, errorMessage: String) {
-        let alert = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: .alert)
-        let okButton = UIAlertAction(title: "ok", style: .cancel)
-        alert.addAction(okButton)
-        self.present(alert, animated: true)
-    }
 }
 
 private extension OrderScreenViewController {
@@ -72,9 +83,9 @@ private extension OrderScreenViewController {
     func setupController() {
         setupNavigationTitle()
         view.addSubview(orderScreenView)
-
+        
         view.backgroundColor = .white
-
+        
         setupConstraints()
     }
     
@@ -89,12 +100,12 @@ private extension OrderScreenViewController {
     
     func setupNavigationTitle() {
         let titleLabel = UILabel()
-        titleLabel.text = "Оформление заказа"
-
+        titleLabel.text = Constants.controllerTitle
+        
         let customTitleView = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 60))
         titleLabel.frame = CGRect(x: 25, y: 9, width: 200, height: 40)
         customTitleView.addSubview(titleLabel)
-
+        
         navigationItem.titleView = customTitleView
     }
 }

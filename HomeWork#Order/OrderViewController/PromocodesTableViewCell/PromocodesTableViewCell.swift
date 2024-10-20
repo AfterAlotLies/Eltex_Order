@@ -10,13 +10,17 @@ import UIKit
 
 final class PromocodesTableViewCell: UITableViewCell {
     
+    private enum Constants {
+        static let promocodeInfoButtonImage = UIImage(named: "info_circle")
+    }
+    
     static let identifer = String(describing: PromocodesTableViewCell.self)
     
     private lazy var contentViewCell: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
-        view.backgroundColor = UIProperties.cellColor
+        view.backgroundColor = UIColorProperties.grayBackgroundColor
         view.layer.cornerRadius = 15
         return view
     }()
@@ -48,14 +52,14 @@ final class PromocodesTableViewCell: UITableViewCell {
         let view = SaleView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
-        view.backgroundColor = UIProperties.saleViewColor
+        view.backgroundColor = UIColorProperties.saleViewColor
         return view
     }()
     
     private lazy var promocodeInfoButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "info_circle"), for: .normal)
+        button.setImage(Constants.promocodeInfoButtonImage, for: .normal)
         return button
     }()
     
@@ -63,7 +67,7 @@ final class PromocodesTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 12)
-        label.textColor = UIProperties.viewLabelsColor
+        label.textColor = UIColorProperties.grayLabelColor
         return label
     }()
     
@@ -71,7 +75,7 @@ final class PromocodesTableViewCell: UITableViewCell {
         let switcher = UISwitch()
         switcher.translatesAutoresizingMaskIntoConstraints = false
         switcher.isOn = false
-        switcher.onTintColor = UIProperties.switcherONColor
+        switcher.onTintColor = UIColorProperties.switcherONColor
         switcher.addTarget(self, action: #selector(switchActivation), for: .valueChanged)
         return switcher
     }()
@@ -80,7 +84,7 @@ final class PromocodesTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontSizeToFitWidth = true
-        label.textColor = UIProperties.viewLabelsColor
+        label.textColor = UIColorProperties.grayLabelColor
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()

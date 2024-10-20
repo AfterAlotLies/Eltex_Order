@@ -14,6 +14,17 @@ protocol IOrderScreenView: AnyObject {
 
 final class OrderScreenView: UIView {
     
+    private enum Constants {
+        static let promocodeInfoLabelText = "На один товар можно применить только один промокод"
+        static let activePromocodesButtonTitle = "Применить промокод"
+        static let activePromocodeButtonImage = UIImage(named: "promocode")
+        static let hidePromocodesButtonTitle = "Скрыть промокоды"
+        static let alertErrorTitle = "Что-то пошло не так..."
+        static let topAnchorMargin: CGFloat = 16
+        static let leadingAnchorMargin: CGFloat = 16
+        static let trailingAnchorMargin: CGFloat = -16
+    }
+    
     private lazy var orderScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +43,7 @@ final class OrderScreenView: UIView {
     private lazy var dividerTopView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIProperties.dividerTopViewColor
+        view.backgroundColor = UIColorProperties.dividerTopViewColor
         return view
     }()
     
@@ -47,9 +58,9 @@ final class OrderScreenView: UIView {
     private lazy var promocodeInfoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "На один товар можно применить только один промокод"
+        label.text = Constants.promocodeInfoLabelText
         label.textAlignment = .left
-        label.textColor = UIProperties.viewLabelsColor
+        label.textColor = UIColorProperties.grayLabelColor
         label.font = UIFont.systemFont(ofSize: 14)
         label.numberOfLines = 2
         return label
@@ -58,11 +69,11 @@ final class OrderScreenView: UIView {
     private lazy var activePromocodesButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Применить промокод", for: .normal)
-        button.setImage(UIImage(named: "promocode"), for: .normal)
-        button.tintColor = UIProperties.promocodeButtonColorsProperties
-        button.setTitleColor(UIProperties.promocodeButtonColorsProperties, for: .normal)
-        button.backgroundColor = UIProperties.activePromocodeButtonBackgroundColor
+        button.setTitle(Constants.activePromocodesButtonTitle, for: .normal)
+        button.setImage(Constants.activePromocodeButtonImage, for: .normal)
+        button.tintColor = UIColorProperties.promocodeButtonColorsProperties
+        button.setTitleColor(UIColorProperties.promocodeButtonColorsProperties, for: .normal)
+        button.backgroundColor = UIColorProperties.activePromocodeButtonBackgroundColor
         button.layer.cornerRadius = 10
         button.imageEdgeInsets.left = -25
         button.layer.borderWidth = 1
@@ -85,8 +96,8 @@ final class OrderScreenView: UIView {
     private lazy var hidePromocodesButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Скрыть промокоды", for: .normal)
-        button.setTitleColor(UIProperties.promocodeButtonColorsProperties, for: .normal)
+        button.setTitle(Constants.hidePromocodesButtonTitle, for: .normal)
+        button.setTitleColor(UIColorProperties.promocodeButtonColorsProperties, for: .normal)
         return button
     }()
     
@@ -120,22 +131,26 @@ final class OrderScreenView: UIView {
         orderScrollView.contentSize = contentView.frame.size
     }
     
+}
+
+extension OrderScreenView {
+    
     func showOrder(_ order: Order) {
         self.order = order
         
         if order.products.isEmpty {
-            delegate?.showErrorMessage(errorTitle: "Что-то пошло не так...", errorMessage: "Продуктов нет")
+            delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Продуктов нет")
         }
         
         order.products.forEach {
             if $0.price <= 0 {
-                delegate?.showErrorMessage(errorTitle: "Что-то пошло не так...", errorMessage: "Не может быть цена продукта меньше или равна 0")
+                delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Не может быть цена продукта меньше или равна 0")
             }
         }
         
         for orderProd in order.products {
             if orderProd.price < order.baseDiscount ?? 0 {
-                delegate?.showErrorMessage(errorTitle: "Что-то пошло не так...", errorMessage: "Не может текущая скидка быть больше чем сумма заказа")
+                delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Не может текущая скидка быть больше чем сумма заказа")
             }
         }
         
@@ -143,7 +158,6 @@ final class OrderScreenView: UIView {
         bottomOrderView.setData(order)
         promocodesTableView.reloadData()
     }
-    
 }
 
 extension OrderScreenView: UITableViewDataSource {
@@ -168,7 +182,7 @@ extension OrderScreenView: UITableViewDataSource {
         if order.promocodes[indexPath.row].active == true {
             countOfChoosenPromocodes += 1
             if countOfChoosenPromocodes > 2 {
-                delegate?.showErrorMessage(errorTitle: "Что-то пошло не так...", errorMessage: "Было активировано более 2-х промокодов")
+                delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Было активировано более 2-х промокодов")
                 tableView.isHidden = true
                 showErrorLabel()
             }
@@ -186,7 +200,7 @@ private extension OrderScreenView {
     func showErrorLabel() {
         let errorLabel = UILabel()
         errorLabel.translatesAutoresizingMaskIntoConstraints = false
-        errorLabel.text = "Что то пошло не так..."
+        errorLabel.text = Constants.alertErrorTitle
         errorLabel.textAlignment = .center
         errorLabel.font = UIFont.boldSystemFont(ofSize: 24)
         addSubview(errorLabel)
@@ -203,7 +217,7 @@ private extension OrderScreenView {
                 countOfChoosenPromocodes += 1
                 bottomOrderView.applyDiscount(order.promocodes[indexPath])
             } else {
-                delegate?.showErrorMessage(errorTitle: "Что-то пошло не так...", errorMessage: "Вы не можете активировать более 2-х промокодов одновременно")
+                delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Вы не можете активировать более 2-х промокодов одновременно")
                 cell.turnOffSwitch()
             }
         } else {
@@ -253,42 +267,42 @@ private extension OrderScreenView {
         ])
         
         NSLayoutConstraint.activate([
-            promocodeLabel.topAnchor.constraint(equalTo: dividerTopView.bottomAnchor, constant: 16),
-            promocodeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            promocodeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            promocodeLabel.topAnchor.constraint(equalTo: dividerTopView.bottomAnchor, constant: Constants.topAnchorMargin),
+            promocodeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.leadingAnchorMargin),
+            promocodeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.trailingAnchorMargin)
         ])
         
         tableViewHeightConstraint = promocodesTableView.heightAnchor.constraint(equalToConstant: 120)
         tableViewHeightConstraint?.isActive = true
         
         NSLayoutConstraint.activate([
-            promocodeInfoLabel.topAnchor.constraint(equalTo: promocodeLabel.bottomAnchor, constant: 16),
-            promocodeInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            promocodeInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            promocodeInfoLabel.topAnchor.constraint(equalTo: promocodeLabel.bottomAnchor, constant: Constants.topAnchorMargin),
+            promocodeInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.leadingAnchorMargin),
+            promocodeInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.trailingAnchorMargin)
         ])
         
         NSLayoutConstraint.activate([
-            activePromocodesButton.topAnchor.constraint(equalTo: promocodeInfoLabel.bottomAnchor, constant: 16),
-            activePromocodesButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            activePromocodesButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            activePromocodesButton.topAnchor.constraint(equalTo: promocodeInfoLabel.bottomAnchor, constant: Constants.topAnchorMargin),
+            activePromocodesButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.leadingAnchorMargin),
+            activePromocodesButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.trailingAnchorMargin),
             activePromocodesButton.heightAnchor.constraint(equalToConstant: 54)
         ])
         
         NSLayoutConstraint.activate([
-            promocodesTableView.topAnchor.constraint(equalTo: activePromocodesButton.bottomAnchor, constant: 16),
-            promocodesTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            promocodesTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
+            promocodesTableView.topAnchor.constraint(equalTo: activePromocodesButton.bottomAnchor, constant: Constants.topAnchorMargin),
+            promocodesTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.leadingAnchorMargin),
+            promocodesTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: Constants.trailingAnchorMargin)
         ])
         
         NSLayoutConstraint.activate([
             hidePromocodesButton.topAnchor.constraint(equalTo: promocodesTableView.bottomAnchor, constant: 8),
-            hidePromocodesButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            hidePromocodesButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16),
+            hidePromocodesButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Constants.leadingAnchorMargin),
+            hidePromocodesButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: Constants.trailingAnchorMargin),
             hidePromocodesButton.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         NSLayoutConstraint.activate([
-            bottomOrderView.topAnchor.constraint(greaterThanOrEqualTo: hidePromocodesButton.bottomAnchor, constant: 16),
+            bottomOrderView.topAnchor.constraint(greaterThanOrEqualTo: hidePromocodesButton.bottomAnchor, constant: Constants.topAnchorMargin),
             bottomOrderView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             bottomOrderView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             bottomOrderView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
