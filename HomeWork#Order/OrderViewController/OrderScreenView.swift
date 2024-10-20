@@ -14,11 +14,6 @@ protocol IOrderScreenView: AnyObject {
 
 final class OrderScreenView: UIView {
     
-    private var countOfChoosenPromocodes: Int = 0
-    private var order: Order?
-    
-    weak var delegate: IOrderScreenView?
-    
     private lazy var orderScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -54,6 +49,7 @@ final class OrderScreenView: UIView {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "На один товар можно применить только один промокод"
         label.textAlignment = .left
+        label.textColor = UIProperties.viewLabelsColor
         label.font = UIFont.systemFont(ofSize: 14)
         label.numberOfLines = 2
         return label
@@ -101,6 +97,10 @@ final class OrderScreenView: UIView {
     }()
     
     private var tableViewHeightConstraint: NSLayoutConstraint?
+    private var countOfChoosenPromocodes: Int = 0
+    private var order: Order?
+    
+    weak var delegate: IOrderScreenView?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -126,8 +126,8 @@ final class OrderScreenView: UIView {
         if order.products.isEmpty {
             delegate?.showErrorMessage(errorTitle: "Что-то пошло не так...", errorMessage: "Продуктов нет")
         }
+        
         order.products.forEach {
-            print($0.price)
             if $0.price <= 0 {
                 delegate?.showErrorMessage(errorTitle: "Что-то пошло не так...", errorMessage: "Не может быть цена продукта меньше или равна 0")
             }
@@ -201,16 +201,15 @@ private extension OrderScreenView {
         if isOn {
             if countOfChoosenPromocodes < 2 {
                 countOfChoosenPromocodes += 1
-                let choosenPromocode = cell.getDiscount(order.promocodes, indexPath: indexPath)
-                bottomOrderView.updateDiscountSale(discount: choosenPromocode, order: order, isOn: true)
+                bottomOrderView.applyDiscount(order.promocodes[indexPath])
             } else {
                 delegate?.showErrorMessage(errorTitle: "Что-то пошло не так...", errorMessage: "Вы не можете активировать более 2-х промокодов одновременно")
                 cell.turnOffSwitch()
             }
         } else {
             countOfChoosenPromocodes -= 1
-            let choosenPromocode = cell.getDiscount(order.promocodes, indexPath: indexPath)
-            bottomOrderView.updateDiscountSale(discount: choosenPromocode, order: order, isOn: false)
+            bottomOrderView.removeDiscount(order.promocodes[indexPath])
+
         }
     }
     

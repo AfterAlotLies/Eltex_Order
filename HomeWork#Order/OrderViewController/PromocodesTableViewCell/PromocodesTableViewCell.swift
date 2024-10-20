@@ -10,8 +10,6 @@ import UIKit
 
 final class PromocodesTableViewCell: UITableViewCell {
     
-    private var switchHandler : ((Bool) -> Void)?
-    
     static let identifer = String(describing: PromocodesTableViewCell.self)
     
     private lazy var contentViewCell: UIView = {
@@ -42,7 +40,6 @@ final class PromocodesTableViewCell: UITableViewCell {
     private lazy var promocodeTitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "4300162112534"
         label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
@@ -65,8 +62,8 @@ final class PromocodesTableViewCell: UITableViewCell {
     private lazy var promocodeDateLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "По 31 Марта"
         label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = UIProperties.viewLabelsColor
         return label
     }()
     
@@ -82,8 +79,8 @@ final class PromocodesTableViewCell: UITableViewCell {
     private lazy var promocodeInfoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Промокод действует при первом заказе"
         label.adjustsFontSizeToFitWidth = true
+        label.textColor = UIProperties.viewLabelsColor
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
@@ -110,6 +107,8 @@ final class PromocodesTableViewCell: UITableViewCell {
         view.backgroundColor = .clear
         return view
     }()
+    
+    private var switchHandler : ((Bool) -> Void)?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

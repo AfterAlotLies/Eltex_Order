@@ -17,13 +17,13 @@ final class BottomOrderScreenView: UIView {
     
     private var totalSumMain = 0.0
     private var totalSum = 0.0
-    private var countOfChoosenPromocodes = 0
-    private var previousDiscount = 0.0
+    private var activePromocodes: [Order.Promocode] = []
+    private var fixedDiscount: Double = 0.0
+    private var paymentDiscount: Double = 0.0
     
     private lazy var priceForTwoProductsLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Цена за 2 товара"
         label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
@@ -62,7 +62,6 @@ final class BottomOrderScreenView: UIView {
     private lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "25 000 ₽"
         label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
@@ -70,7 +69,6 @@ final class BottomOrderScreenView: UIView {
     private lazy var salePriceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "-5 000 ₽"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = salePriceLabelColorsProperties
         return label
@@ -79,7 +77,6 @@ final class BottomOrderScreenView: UIView {
     private lazy var promocodesPriceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "-5 000 ₽"
         label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = promocodesPriceLabelColorsProperties
         return label
@@ -88,7 +85,6 @@ final class BottomOrderScreenView: UIView {
     private lazy var paymentPriceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "-5 000 ₽"
         label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
@@ -111,7 +107,6 @@ final class BottomOrderScreenView: UIView {
     private lazy var totalPriceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "19 000 ₽"
         label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
@@ -161,66 +156,59 @@ final class BottomOrderScreenView: UIView {
     }
     
     func setData(_ data: Order) {
-        let productsCount = data.products.count
-        let productText = getCorrectProductText(for: productsCount)
-        priceForTwoProductsLabel.text = "Цена за \(productsCount) \(productText)"
-        data.products.forEach {
-           totalSumMain += $0.price
-        }
-        
-        promocodesPriceLabel.text = "\(Int(data.paymentDiscount ?? 0)) ₽"
-        
-        let payment = data.paymentDiscount ?? 0 + (data.baseDiscount ?? 0)
-        
-        paymentPriceLabel.text = "\(Int(payment)) ₽"
-        
-        totalPriceLabel.text = "\(Int(totalSumMain)) ₽"
-        
-        if totalSumMain <= 0.0 {
-            priceLabel.text = "-"
-        } else {
-            priceLabel.text = "\(Int(totalSumMain)) ₽"
-        }
+        totalSumMain = data.products.reduce(0) { $0 + $1.price }
         totalSum = totalSumMain
+        fixedDiscount = data.baseDiscount ?? 0
+        paymentDiscount = data.paymentDiscount ?? 0
         
-        data.products.forEach {
-            if $0.price < data.baseDiscount ?? 0 {
-                salePriceLabel.text = "0 ₽"
-            } else {
-                salePriceLabel.text = "\(Int(data.baseDiscount ?? 0)) ₽"
+        data.promocodes.forEach { promocode in
+            if promocode.active {
+                activePromocodes.append(promocode)
             }
         }
+        
+        priceLabel.text = "\(Int(totalSumMain)) ₽"
+        salePriceLabel.text = "- \(Int(fixedDiscount)) ₽"
+        paymentPriceLabel.text = "- \(Int(paymentDiscount)) ₽"
+        
+        recalculateTotalSum()
+        updateUI()
     }
     
-    func updateDiscountSale(discount: Int, order: Order, isOn: Bool) {
-        if isOn && countOfChoosenPromocodes == 0 {
-            let firstDiscount = (totalSum * Double(discount)) / 100
-            totalSum -= firstDiscount
-            if countOfChoosenPromocodes == 2 {
-                previousDiscount = firstDiscount
-                let secondDiscount = (totalSum * Double(discount)) / 10
-                totalSum -= secondDiscount
-                promocodesPriceLabel.text = "\(Int(secondDiscount)) ₽"
-                totalPriceLabel.text = "\(Int(totalSum)) ₽"
-                countOfChoosenPromocodes += 1
-            } else {
-                promocodesPriceLabel.text = "\(Int(firstDiscount)) ₽"
-                totalPriceLabel.text = "\(Int(totalSum)) ₽"
-                countOfChoosenPromocodes += 1
-            }
-        }
-        
-        
-        else {
-            totalSum = totalSumMain
-            totalPriceLabel.text = "\(Int(totalSumMain)) ₽"
-            promocodesPriceLabel.text = "\(Int(order.paymentDiscount ?? 0)) ₽"
-        }
+    func applyDiscount(_ promocode: Order.Promocode) {
+        activePromocodes.append(promocode)
+        recalculateTotalSum()
+        updateUI()
+    }
+    
+    func removeDiscount(_ promocode: Order.Promocode) {
+        activePromocodes.removeAll { $0.title == promocode.title }
+        recalculateTotalSum()
+        updateUI()
     }
     
 }
 
 private extension BottomOrderScreenView {
+    
+    func recalculateTotalSum() {
+        var discountSum: Double = 0.0
+        var totalDiscountPercent: Int = 0
+        
+        activePromocodes.forEach { promocode in
+            let discount = (totalSumMain * Double(promocode.percent)) / 100
+            discountSum += discount
+            totalDiscountPercent += Int(discount)
+        }
+        
+        totalSum = totalSumMain - discountSum - fixedDiscount - paymentDiscount
+        
+        promocodesPriceLabel.text = "- \(totalDiscountPercent) ₽"
+    }
+    
+    func updateUI() {
+        totalPriceLabel.text = "\(Int(totalSum)) ₽"
+    }
     
     func getCorrectProductText(for count: Int) -> String {
         let lastDigit = count % 10
