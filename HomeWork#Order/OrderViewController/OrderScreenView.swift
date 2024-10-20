@@ -12,11 +12,7 @@ protocol IOrderScreenView: AnyObject {
     func showErrorMessage(errorTitle: String, errorMessage: String)
 }
 
-class OrderScreenView: UIView {
-    
-    private let dividerTopViewColor: UIColor = UIColor(red: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1)
-    private let promocodeButtonColorsProperties: UIColor = UIColor(red: 255.0 / 255.0, green: 70.0 / 255.0, blue: 17.0 / 255.0, alpha: 1)
-    private let activePromocodeButtonBackgroundColor: UIColor = UIColor(red: 255.0 / 255.0, green: 70.0 / 255.0, blue: 17.0 / 255.0, alpha: 0.1)
+final class OrderScreenView: UIView {
     
     private var countOfChoosenPromocodes: Int = 0
     private var order: Order?
@@ -41,7 +37,7 @@ class OrderScreenView: UIView {
     private lazy var dividerTopView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = dividerTopViewColor
+        view.backgroundColor = UIProperties.dividerTopViewColor
         return view
     }()
     
@@ -68,9 +64,9 @@ class OrderScreenView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Применить промокод", for: .normal)
         button.setImage(UIImage(named: "promocode"), for: .normal)
-        button.tintColor = promocodeButtonColorsProperties
-        button.setTitleColor(promocodeButtonColorsProperties, for: .normal)
-        button.backgroundColor = activePromocodeButtonBackgroundColor
+        button.tintColor = UIProperties.promocodeButtonColorsProperties
+        button.setTitleColor(UIProperties.promocodeButtonColorsProperties, for: .normal)
+        button.backgroundColor = UIProperties.activePromocodeButtonBackgroundColor
         button.layer.cornerRadius = 10
         button.imageEdgeInsets.left = -25
         button.layer.borderWidth = 1
@@ -94,7 +90,7 @@ class OrderScreenView: UIView {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Скрыть промокоды", for: .normal)
-        button.setTitleColor(promocodeButtonColorsProperties, for: .normal)
+        button.setTitleColor(UIProperties.promocodeButtonColorsProperties, for: .normal)
         return button
     }()
     

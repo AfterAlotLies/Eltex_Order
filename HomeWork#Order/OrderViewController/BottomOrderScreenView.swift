@@ -194,13 +194,17 @@ final class BottomOrderScreenView: UIView {
     
     func updateDiscountSale(discount: Int, order: Order, isOn: Bool) {
         if isOn && countOfChoosenPromocodes == 0 {
-            let totalDiscount = (totalSum * Double(discount)) / 100
-            totalSum -= totalDiscount
+            let firstDiscount = (totalSum * Double(discount)) / 100
+            totalSum -= firstDiscount
             if countOfChoosenPromocodes == 2 {
-                previousDiscount = totalDiscount
-                
+                previousDiscount = firstDiscount
+                let secondDiscount = (totalSum * Double(discount)) / 10
+                totalSum -= secondDiscount
+                promocodesPriceLabel.text = "\(Int(secondDiscount)) ₽"
+                totalPriceLabel.text = "\(Int(totalSum)) ₽"
+                countOfChoosenPromocodes += 1
             } else {
-                promocodesPriceLabel.text = "\(Int(totalDiscount)) ₽"
+                promocodesPriceLabel.text = "\(Int(firstDiscount)) ₽"
                 totalPriceLabel.text = "\(Int(totalSum)) ₽"
                 countOfChoosenPromocodes += 1
             }

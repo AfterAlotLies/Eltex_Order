@@ -50,7 +50,7 @@ final class OrderScreenViewController: UIViewController {
                                                                           info: nil,
                                                                           active: false)],
                                         products: [Order.Product.init(price: 30000.0, title: "Продукты")],
-                                        paymentDiscount: 3000.0,
+                                        paymentDiscount: 0.0,
                                         baseDiscount: 10.0))
     }
 

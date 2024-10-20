@@ -10,10 +10,6 @@ import UIKit
 
 final class PromocodesTableViewCell: UITableViewCell {
     
-    private let saleViewColor: UIColor = UIColor(red: 0.0 / 255.0, green: 183.0 / 255.0, blue: 117.0 / 255.0, alpha: 1)
-    private let cellColor: UIColor = UIColor(red: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1)
-    private let switcherONColor: UIColor = UIColor(red: 255.0 / 255.0, green: 70.0 / 255.0, blue: 17.0 / 255.0, alpha: 1)
-    
     private var switchHandler : ((Bool) -> Void)?
     
     static let identifer = String(describing: PromocodesTableViewCell.self)
@@ -22,7 +18,7 @@ final class PromocodesTableViewCell: UITableViewCell {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.clipsToBounds = true
-        view.backgroundColor = cellColor
+        view.backgroundColor = UIProperties.cellColor
         view.layer.cornerRadius = 15
         return view
     }()
@@ -55,7 +51,7 @@ final class PromocodesTableViewCell: UITableViewCell {
         let view = SaleView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
-        view.backgroundColor = saleViewColor
+        view.backgroundColor = UIProperties.saleViewColor
         return view
     }()
     
@@ -78,7 +74,7 @@ final class PromocodesTableViewCell: UITableViewCell {
         let switcher = UISwitch()
         switcher.translatesAutoresizingMaskIntoConstraints = false
         switcher.isOn = false
-        switcher.onTintColor = switcherONColor
+        switcher.onTintColor = UIProperties.switcherONColor
         switcher.addTarget(self, action: #selector(switchActivation), for: .valueChanged)
         return switcher
     }()
