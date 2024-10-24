@@ -129,7 +129,12 @@ final class PromocodesTableViewCell: UITableViewCell {
         promocodeDateLabel.text = nil
         promocodeInfoLabel.text = nil
         promocodeTitleLabel.text = nil
+        promocodeActivationSwitch.isOn = false
+        switchHandler = nil
+        promocodeInfoButton.setImage(Constants.promocodeInfoButtonImage, for: .normal)
+        saleView.backgroundColor = UIColorProperties.saleViewColor
     }
+
     
     func turnOffSwitch() {
         promocodeActivationSwitch.setOn(false, animated: true)
