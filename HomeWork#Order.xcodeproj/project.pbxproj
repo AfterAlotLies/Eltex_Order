@@ -19,6 +19,8 @@
 		11143A112CC251560024C5B7 /* PromocodesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */; };
 		11143A142CC27CF10024C5B7 /* SaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A132CC27CF10024C5B7 /* SaleView.swift */; };
 		11143A172CC51A660024C5B7 /* UIColorProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A162CC51A660024C5B7 /* UIColorProperties.swift */; };
+		11D4A16B2CC77ED9007589CD /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D4A16A2CC77ED9007589CD /* OrderViewModel.swift */; };
+		11D4A18D2CCA12C2007589CD /* UIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D4A18C2CCA12C2007589CD /* UIType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromocodesTableViewCell.swift; sourceTree = "<group>"; };
 		11143A132CC27CF10024C5B7 /* SaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleView.swift; sourceTree = "<group>"; };
 		11143A162CC51A660024C5B7 /* UIColorProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorProperties.swift; sourceTree = "<group>"; };
+		11D4A16A2CC77ED9007589CD /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
+		11D4A18C2CCA12C2007589CD /* UIType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,8 +74,7 @@
 			children = (
 				11143A152CC51A510024C5B7 /* Enums */,
 				11143A0A2CBFECE10024C5B7 /* Navigation */,
-				11143A072CBFE5A80024C5B7 /* OrderViewController */,
-				11143A042CBFDF260024C5B7 /* OrderStruct */,
+				11D4A1602CC77C18007589CD /* Modules */,
 				11143A032CBFDB100024C5B7 /* Resources */,
 				11143A022CBFDAEB0024C5B7 /* Application */,
 			);
@@ -97,40 +100,12 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		11143A042CBFDF260024C5B7 /* OrderStruct */ = {
-			isa = PBXGroup;
-			children = (
-				11143A052CBFDF330024C5B7 /* Order.swift */,
-			);
-			path = OrderStruct;
-			sourceTree = "<group>";
-		};
-		11143A072CBFE5A80024C5B7 /* OrderViewController */ = {
-			isa = PBXGroup;
-			children = (
-				11143A0F2CC251400024C5B7 /* PromocodesTableViewCell */,
-				111439F22CBFDA3C0024C5B7 /* OrderScreenViewController.swift */,
-				11143A082CBFE63C0024C5B7 /* OrderScreenView.swift */,
-				11143A0D2CC0EC100024C5B7 /* BottomOrderScreenView.swift */,
-			);
-			path = OrderViewController;
-			sourceTree = "<group>";
-		};
 		11143A0A2CBFECE10024C5B7 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
 				11143A0B2CBFEE200024C5B7 /* NavigationController.swift */,
 			);
 			path = Navigation;
-			sourceTree = "<group>";
-		};
-		11143A0F2CC251400024C5B7 /* PromocodesTableViewCell */ = {
-			isa = PBXGroup;
-			children = (
-				11143A122CC27CE20024C5B7 /* SaleView */,
-				11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */,
-			);
-			path = PromocodesTableViewCell;
 			sourceTree = "<group>";
 		};
 		11143A122CC27CE20024C5B7 /* SaleView */ = {
@@ -144,9 +119,80 @@
 		11143A152CC51A510024C5B7 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				11D4A18C2CCA12C2007589CD /* UIType.swift */,
 				11143A162CC51A660024C5B7 /* UIColorProperties.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		11D4A1602CC77C18007589CD /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				11D4A1612CC77C54007589CD /* OrderScreenModule */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		11D4A1612CC77C54007589CD /* OrderScreenModule */ = {
+			isa = PBXGroup;
+			children = (
+				11D4A1632CC77E3B007589CD /* Model */,
+				11D4A1622CC77E2C007589CD /* View */,
+				11D4A1642CC77E3F007589CD /* ViewModel */,
+			);
+			path = OrderScreenModule;
+			sourceTree = "<group>";
+		};
+		11D4A1622CC77E2C007589CD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				11D4A1662CC77E64007589CD /* View */,
+				11D4A1652CC77E54007589CD /* Controller */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		11D4A1632CC77E3B007589CD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				11143A052CBFDF330024C5B7 /* Order.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		11D4A1642CC77E3F007589CD /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				11D4A16A2CC77ED9007589CD /* OrderViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		11D4A1652CC77E54007589CD /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				111439F22CBFDA3C0024C5B7 /* OrderScreenViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		11D4A1662CC77E64007589CD /* View */ = {
+			isa = PBXGroup;
+			children = (
+				11D4A1672CC77E86007589CD /* TableViewCell */,
+				11143A082CBFE63C0024C5B7 /* OrderScreenView.swift */,
+				11143A0D2CC0EC100024C5B7 /* BottomOrderScreenView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		11D4A1672CC77E86007589CD /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				11143A122CC27CE20024C5B7 /* SaleView */,
+				11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */,
+			);
+			path = TableViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,11 +266,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				11143A142CC27CF10024C5B7 /* SaleView.swift in Sources */,
+				11D4A16B2CC77ED9007589CD /* OrderViewModel.swift in Sources */,
 				111439F32CBFDA3C0024C5B7 /* OrderScreenViewController.swift in Sources */,
 				11143A172CC51A660024C5B7 /* UIColorProperties.swift in Sources */,
 				11143A0C2CBFEE200024C5B7 /* NavigationController.swift in Sources */,
 				111439EF2CBFDA3C0024C5B7 /* AppDelegate.swift in Sources */,
 				11143A092CBFE63C0024C5B7 /* OrderScreenView.swift in Sources */,
+				11D4A18D2CCA12C2007589CD /* UIType.swift in Sources */,
 				11143A0E2CC0EC100024C5B7 /* BottomOrderScreenView.swift in Sources */,
 				11143A062CBFDF330024C5B7 /* Order.swift in Sources */,
 				11143A112CC251560024C5B7 /* PromocodesTableViewCell.swift in Sources */,

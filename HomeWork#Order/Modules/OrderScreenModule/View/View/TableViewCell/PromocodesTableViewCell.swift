@@ -124,6 +124,13 @@ final class PromocodesTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        promocodeDateLabel.text = nil
+        promocodeInfoLabel.text = nil
+        promocodeTitleLabel.text = nil
+    }
+    
     func turnOffSwitch() {
         promocodeActivationSwitch.setOn(false, animated: true)
     }
@@ -153,10 +160,6 @@ final class PromocodesTableViewCell: UITableViewCell {
             stackViewContent.arrangedSubviews[1].isHidden = true
         }
         promocodeActivationSwitch.isOn = order.active
-    }
-    
-    func getDiscount(_ order: [Order.Promocode], indexPath: Int) -> Int {
-        return order[indexPath].percent
     }
 }
 

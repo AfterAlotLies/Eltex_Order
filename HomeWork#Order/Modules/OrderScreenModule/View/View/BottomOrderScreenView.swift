@@ -84,9 +84,6 @@ final class BottomOrderScreenView: UIView {
     
     private var totalSumMain = 0.0
     private var totalSum = 0.0
-    private var activePromocodes: [Order.Promocode] = []
-    private var fixedDiscount: Double = 0.0
-    private var paymentDiscount: Double = 0.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -102,37 +99,21 @@ final class BottomOrderScreenView: UIView {
 
 extension BottomOrderScreenView {
     
+    func updateBottomViewDataUI(_ totalSum: Double, _ totalDiscount: Int) {
+        promocodesPriceLabel.text = "- \(formatPrice(totalDiscount)) ₽"
+        totalPriceLabel.text = "\(formatPrice(Int(totalSum))) ₽"
+    }
+    
     func setData(_ data: Order) {
         totalSumMain = data.products.reduce(0) { $0 + $1.price }
-        totalSum = totalSumMain
-        fixedDiscount = data.baseDiscount ?? 0
-        paymentDiscount = data.paymentDiscount ?? 0
         
-        data.promocodes.forEach { promocode in
-            if promocode.active {
-                activePromocodes.append(promocode)
-            }
-        }
-        
-        priceLabel.text = "\(formatPrice(Int(totalSum))) ₽"
-        salePriceLabel.text = "- \(formatPrice(Int(fixedDiscount))) ₽"
-        paymentPriceLabel.text = "- \(formatPrice(Int(paymentDiscount))) ₽"
+        priceLabel.text = "\(formatPrice(Int(totalSumMain))) ₽"
+        promocodesPriceLabel.text = "0 ₽"
+        salePriceLabel.text = "- \(formatPrice(Int(data.baseDiscount ?? 0))) ₽"
+        paymentPriceLabel.text = "- \(formatPrice(Int(data.paymentDiscount ?? 0))) ₽"
         priceForTwoProductsLabel.text = "Цена за \(data.products.count) \(getCorrectProductText(for: data.products.count))"
-        
-        recalculateTotalSum()
-        updateUI()
-    }
-    
-    func applyDiscount(_ promocode: Order.Promocode) {
-        activePromocodes.append(promocode)
-        recalculateTotalSum()
-        updateUI()
-    }
-    
-    func removeDiscount(_ promocode: Order.Promocode) {
-        activePromocodes.removeAll { $0.title == promocode.title }
-        recalculateTotalSum()
-        updateUI()
+        totalPriceLabel.text = "\(formatPrice(Int(totalSumMain))) ₽"
+
     }
 }
 
@@ -162,25 +143,6 @@ private extension BottomOrderScreenView {
             label.textColor = textColor
         }
         return label
-    }
-    
-    func recalculateTotalSum() {
-        var discountSum: Double = 0.0
-        var totalDiscountPercent: Int = 0
-        
-        activePromocodes.forEach { promocode in
-            let discount = (totalSumMain * Double(promocode.percent)) / 100
-            discountSum += discount
-            totalDiscountPercent += Int(discount)
-        }
-        
-        totalSum = totalSumMain - discountSum - fixedDiscount - paymentDiscount
-        
-        promocodesPriceLabel.text = "- \(formatPrice(totalDiscountPercent)) ₽"
-    }
-    
-    func updateUI() {
-        totalPriceLabel.text = "\(formatPrice(Int(totalSum))) ₽"
     }
     
     func getCorrectProductText(for count: Int) -> String {

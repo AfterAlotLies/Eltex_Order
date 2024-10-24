@@ -8,10 +8,6 @@
 import Foundation
 import UIKit
 
-protocol IOrderScreenView: AnyObject {
-    func showErrorMessage(errorTitle: String, errorMessage: String)
-}
-
 final class OrderScreenView: UIView {
     
     private enum Constants {
@@ -67,19 +63,21 @@ final class OrderScreenView: UIView {
     }()
     
     private lazy var activePromocodesButton: UIButton = {
-        let button = UIButton(type: .system)
+        var config = UIButton.Configuration.plain()
+        config.title = Constants.activePromocodesButtonTitle
+        config.image = Constants.activePromocodeButtonImage
+        config.imagePadding = 10
+        config.baseForegroundColor = UIColorProperties.promocodeButtonColorsProperties
+        config.background.backgroundColor = UIColorProperties.activePromocodeButtonBackgroundColor
+        config.cornerStyle = .medium
+        
+        let button = UIButton(configuration: config, primaryAction: nil)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle(Constants.activePromocodesButtonTitle, for: .normal)
-        button.setImage(Constants.activePromocodeButtonImage, for: .normal)
-        button.tintColor = UIColorProperties.promocodeButtonColorsProperties
-        button.setTitleColor(UIColorProperties.promocodeButtonColorsProperties, for: .normal)
-        button.backgroundColor = UIColorProperties.activePromocodeButtonBackgroundColor
-        button.layer.cornerRadius = 10
-        button.imageEdgeInsets.left = -25
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.clear.cgColor
         return button
     }()
+
     
     private lazy var promocodesTableView: UITableView = {
         let tableView = UITableView()
@@ -110,10 +108,10 @@ final class OrderScreenView: UIView {
     private var tableViewHeightConstraint: NSLayoutConstraint?
     private var countOfChoosenPromocodes: Int = 0
     private var order: Order?
+    private let viewModel: OrderViewModel
     
-    weak var delegate: IOrderScreenView?
-    
-    override init(frame: CGRect) {
+    init(frame: CGRect, viewModel: OrderViewModel) {
+        self.viewModel = viewModel
         super.init(frame: frame)
         setupView()
     }
@@ -131,32 +129,46 @@ final class OrderScreenView: UIView {
         orderScrollView.contentSize = contentView.frame.size
     }
     
-}
-
-extension OrderScreenView {
+    func updateBottomViewUI(totalSum: Double, totalDiscount: Int) {
+        bottomOrderView.updateBottomViewDataUI(totalSum, totalDiscount)
+    }
     
     func showOrder(_ order: Order) {
         self.order = order
         
-        if order.products.isEmpty {
-            delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Продуктов нет")
-        }
-        
-        order.products.forEach {
-            if $0.price <= 0 {
-                delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Не может быть цена продукта меньше или равна 0")
-            }
-        }
-        
-        for orderProd in order.products {
-            if orderProd.price < order.baseDiscount ?? 0 {
-                delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Не может текущая скидка быть больше чем сумма заказа")
-            }
-        }
-        
         promocodeLabel.text = order.screenTitle
         bottomOrderView.setData(order)
         promocodesTableView.reloadData()
+    }
+    
+    func showErrorLabel(for ui: UIType) {
+        let errorLabel = UILabel()
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.text = Constants.alertErrorTitle
+        errorLabel.textAlignment = .center
+        errorLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        addSubview(errorLabel)
+        
+        switch ui {
+
+        case .tableView:
+            promocodesTableView.isHidden = true
+            errorLabel.topAnchor.constraint(equalTo: activePromocodesButton.bottomAnchor, constant: 16).isActive = true
+            errorLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
+            errorLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
+            errorLabel.bottomAnchor.constraint(equalTo: hidePromocodesButton.topAnchor, constant: -16).isActive = true
+
+        case .bottomView:
+            print("111")
+        }
+        
+    }
+    
+    func updateTableViewCellSwitch(for indexPath: Int) {
+        guard let cell = promocodesTableView.cellForRow(at: IndexPath(row: indexPath, section: 0)) as? PromocodesTableViewCell else {
+            return
+        }
+        cell.turnOffSwitch()
     }
 }
 
@@ -176,16 +188,7 @@ extension OrderScreenView: UITableViewDataSource {
         }
         
         cell.setSwitchHandler { [weak self] isOn in
-            self?.handleSwitch(isOn, indexPath: indexPath.row, cell: cell)
-        }
-        
-        if order.promocodes[indexPath.row].active == true {
-            countOfChoosenPromocodes += 1
-            if countOfChoosenPromocodes > 2 {
-                delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Было активировано более 2-х промокодов")
-                tableView.isHidden = true
-                showErrorLabel()
-            }
+            self?.viewModel.handleSwitch(isOn, indexPath: indexPath.row)
         }
         
         cell.configureCell(order.promocodes[indexPath.row])
@@ -196,36 +199,6 @@ extension OrderScreenView: UITableViewDataSource {
 }
 
 private extension OrderScreenView {
-    
-    func showErrorLabel() {
-        let errorLabel = UILabel()
-        errorLabel.translatesAutoresizingMaskIntoConstraints = false
-        errorLabel.text = Constants.alertErrorTitle
-        errorLabel.textAlignment = .center
-        errorLabel.font = UIFont.boldSystemFont(ofSize: 24)
-        addSubview(errorLabel)
-        errorLabel.topAnchor.constraint(equalTo: activePromocodesButton.bottomAnchor, constant: 16).isActive = true
-        errorLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-        errorLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
-        errorLabel.bottomAnchor.constraint(equalTo: hidePromocodesButton.topAnchor, constant: -16).isActive = true
-    }
-    
-    func handleSwitch(_ isOn: Bool, indexPath: Int, cell: PromocodesTableViewCell) {
-        guard let order = order else { return }
-        if isOn {
-            if countOfChoosenPromocodes < 2 {
-                countOfChoosenPromocodes += 1
-                bottomOrderView.applyDiscount(order.promocodes[indexPath])
-            } else {
-                delegate?.showErrorMessage(errorTitle: Constants.alertErrorTitle, errorMessage: "Вы не можете активировать более 2-х промокодов одновременно")
-                cell.turnOffSwitch()
-            }
-        } else {
-            countOfChoosenPromocodes -= 1
-            bottomOrderView.removeDiscount(order.promocodes[indexPath])
-
-        }
-    }
     
     func setupView() {
         addSubview(orderScrollView)
