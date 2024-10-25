@@ -144,6 +144,10 @@ final class PromocodesTableViewCell: UITableViewCell {
         switchHandler = closure
     }
     
+    func hideCell() {
+        contentView.isHidden = true
+    }
+    
     func configureCell(_ order: Order.Promocode) {
         promocodeTitleLabel.text = order.title
         saleView.configureLabel(text: order.percent)
@@ -158,11 +162,12 @@ final class PromocodesTableViewCell: UITableViewCell {
             promocodeDateLabel.isHidden = true
         }
         
-        
         if let promocodeInfo = order.info {
             promocodeInfoLabel.text = promocodeInfo
         } else {
-            stackViewContent.arrangedSubviews[1].isHidden = true
+//            promocodeInfoLabel.isHidden = true
+//            bottomView.isHidden = true
+//            stackViewContent.arrangedSubviews[1].isHidden = true
         }
         promocodeActivationSwitch.isOn = order.active
     }

@@ -82,9 +82,6 @@ final class BottomOrderScreenView: UIView {
         return label
     }()
     
-    private var totalSumMain = 0.0
-    private var totalSum = 0.0
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -105,7 +102,7 @@ extension BottomOrderScreenView {
     }
     
     func setData(_ data: Order) {
-        totalSumMain = data.products.reduce(0) { $0 + $1.price }
+        let totalSumMain = data.products.reduce(0) { $0 + $1.price }
         
         priceLabel.text = "\(formatPrice(Int(totalSumMain))) ₽"
         promocodesPriceLabel.text = "0 ₽"

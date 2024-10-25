@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+// MARK: - OrderScreenView Class
 final class OrderScreenView: UIView {
     
     private enum Constants {
@@ -75,6 +76,7 @@ final class OrderScreenView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.clear.cgColor
+//        button.addTarget(self, action: #selector(<#T##@objc method#>), for: .touchUpInside)
         return button
     }()
 
@@ -96,6 +98,7 @@ final class OrderScreenView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(Constants.hidePromocodesButtonTitle, for: .normal)
         button.setTitleColor(UIColorProperties.promocodeButtonColorsProperties, for: .normal)
+        button.addTarget(self, action: #selector(handleHidePromocodes), for: .touchUpInside)
         return button
     }()
     
@@ -106,7 +109,6 @@ final class OrderScreenView: UIView {
     }()
     
     private var tableViewHeightConstraint: NSLayoutConstraint?
-    private var countOfChoosenPromocodes: Int = 0
     private var order: Order?
     private let viewModel: OrderViewModel
     
@@ -129,16 +131,28 @@ final class OrderScreenView: UIView {
         orderScrollView.contentSize = contentView.frame.size
     }
     
+    // MARK: - Public Methods
     func updateBottomViewUI(totalSum: Double, totalDiscount: Int) {
         bottomOrderView.updateBottomViewDataUI(totalSum, totalDiscount)
     }
     
     func showOrder(_ order: Order) {
         self.order = order
-        
         promocodeLabel.text = order.screenTitle
         bottomOrderView.setData(order)
         promocodesTableView.reloadData()
+    }
+    
+    func updateLayoutSubviews() {
+        layoutSubviews()
+    }
+    
+    func changeHideButtonTitle(on isActive: Bool) {
+        if isActive {
+            hidePromocodesButton.setTitle("Показать промокоды", for: .normal)
+        } else {
+            hidePromocodesButton.setTitle("Скрыть промокоды", for: .normal)
+        }
     }
     
     func showErrorLabel(for ui: UIType) {
@@ -154,12 +168,24 @@ final class OrderScreenView: UIView {
         case .tableView:
             promocodesTableView.isHidden = true
             errorLabel.topAnchor.constraint(equalTo: activePromocodesButton.bottomAnchor, constant: 16).isActive = true
-            errorLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16).isActive = true
-            errorLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16).isActive = true
+            errorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
+            errorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
             errorLabel.bottomAnchor.constraint(equalTo: hidePromocodesButton.topAnchor, constant: -16).isActive = true
 
         case .bottomView:
-            print("111")
+            bottomOrderView.isHidden = true
+            errorLabel.topAnchor.constraint(equalTo: promocodesTableView.bottomAnchor, constant: 16).isActive = true
+            errorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
+            errorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+            errorLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16).isActive = true
+
+        case .uiview:
+            hideUI()
+            errorLabel.topAnchor.constraint(equalTo: promocodeInfoLabel.bottomAnchor, constant: 16).isActive = true
+            errorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16).isActive = true
+            errorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16).isActive = true
+            errorLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16).isActive = true
+            
         }
         
     }
@@ -172,6 +198,7 @@ final class OrderScreenView: UIView {
     }
 }
 
+// MARK: - OrderScreenView + UITableViewDataSource
 extension OrderScreenView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -198,7 +225,26 @@ extension OrderScreenView: UITableViewDataSource {
     
 }
 
+// MARK: - Private Methods
 private extension OrderScreenView {
+    
+    func hideUI() {
+        activePromocodesButton.isHidden = true
+        promocodesTableView.isHidden = true
+        hidePromocodesButton.isHidden = true
+        bottomOrderView.isHidden = true
+    }
+    
+    @objc
+    func addNewPromocodeHandler() {
+//        let newPromocodeVC = NewPromocodeViewController()
+        
+    }
+    
+    @objc
+    func handleHidePromocodes() {
+        viewModel.hidePromocodesAction()
+    }
     
     func setupView() {
         addSubview(orderScrollView)

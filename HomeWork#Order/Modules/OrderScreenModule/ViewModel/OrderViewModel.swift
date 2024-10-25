@@ -9,10 +9,11 @@ import Foundation
 
 protocol OrderViewModelDelegate: AnyObject {
     func setData(_ data: Order)
-    func showErrorAlert(_ titleError: String, _ messageError: String)
+    func showAlert(_ alertTitle: String, _ alertMessage: String)
     func countOfChoosenPromocodesDidChanged(_ count: Int)
     func isActiveCellDidChanged(_ index: Int)
     func didUpdateTotalSum(_ totalSum: Double, totalDiscount: Double)
+    func didHidePromocode(_ data: Order, isActive: Bool)
 }
 
 final class OrderViewModel {
@@ -27,7 +28,7 @@ final class OrderViewModel {
     
     private var errorMessage: String = "" {
         didSet {
-            delegate?.showErrorAlert("Что-то пошло не так...", errorMessage)
+            delegate?.showAlert(ErrorMessages.titleAlert, errorMessage)
         }
     }
     
@@ -45,22 +46,20 @@ final class OrderViewModel {
         }
     }
     
-    private var totalSum = 0.0 {
+    private var totalSum: Double = 0.0 {
         didSet {
             notifyUpdate()
         }
     }
     
-    private var totalSumMain = 0.0
+    private var totalSumMain: Double = 0.0
     private var activePromocodes: [Order.Promocode] = []
+    private var updatedPromocodes: [Order.Promocode] = []
     private var fixedDiscount: Double = 0.0
     private var paymentDiscount: Double = 0.0
-
+    private var isPromocodesHidden: Bool = false
     
     weak var delegate: OrderViewModelDelegate?
-}
-
-extension OrderViewModel {
     
     func setData() {
         let order = (Order(screenTitle: "Промокоды",
@@ -83,7 +82,7 @@ extension OrderViewModel {
                                                                           percent: 5,
                                                                           endDate: Date(),
                                                                           info: nil,
-                                                                          active: false),
+                                                                          active: true),
                                                      Order.Promocode.init(title: "4300162112531",
                                                                           percent: 15,
                                                                           endDate: Date(),
@@ -94,19 +93,24 @@ extension OrderViewModel {
                                         paymentDiscount: 1000.0,
                                         baseDiscount: 1000.0))
         self.data = order
+        updatedPromocodes = order.promocodes
         isDataCorrect()
         setupDataForBottomView()
     }
     
     func handleSwitch(_ isOn: Bool, indexPath: Int) {
-        guard let data = data else { return }
+        guard let data = data,
+        indexPath < updatedPromocodes.count
+        else { return }
         
+        updatedPromocodes[indexPath].active = isOn
         if isOn {
             if countOfChoosenPromocodes < 2 {
                 countOfChoosenPromocodes += 1
                 applyDiscount(data.promocodes[indexPath])
             } else {
-                errorMessage = "Вы не можете активировать более 2-х промокодов одновременно"
+                errorMessage = ErrorMessages.moreThanTwoCurrentActivatedPromocodes
+                updatedPromocodes[indexPath].active = false
                 isActiveCell = indexPath
             }
         } else {
@@ -114,6 +118,28 @@ extension OrderViewModel {
             removeDiscount(data.promocodes[indexPath])
         }
     }
+    
+    func setupNextController() {
+        
+    }
+    
+    func hidePromocodesAction() {
+        guard var data = data else { return }
+
+        if isPromocodesHidden {
+            data.promocodes = updatedPromocodes
+            isPromocodesHidden = false
+        } else {
+            let activePromocodes = updatedPromocodes.filter { $0.active }
+            data.promocodes = Array(activePromocodes.prefix(3))
+            isPromocodesHidden = true
+        }
+        
+        self.data = data
+        delegate?.didHidePromocode(data, isActive: isPromocodesHidden)
+        recalculateTotalSum()
+    }
+
 }
 
 private extension OrderViewModel {
@@ -121,7 +147,7 @@ private extension OrderViewModel {
     func isDataCorrect() {
         if let data = data {
             if data.products.isEmpty {
-                errorMessage = "На данный момент, заказов в корзине нет"
+                errorMessage = ErrorMessages.emptyProducts
             }
             
             data.promocodes.forEach {
@@ -129,29 +155,32 @@ private extension OrderViewModel {
                     countOfChoosenPromocodes += 1
                     if countOfChoosenPromocodes > 2 {
                         countOfChoosenPromocodes = 2
-                        errorMessage = "Было активировано более 2-х промокодов"
+                        errorMessage = ErrorMessages.invalidCountActivatedPromocodes
                     }
                 }
             }
             
             data.products.forEach {
                 if $0.price <= 0 {
-                    errorMessage = "Цена заказов должна быть больше нуля"
+                    errorMessage = ErrorMessages.invalidProductsCost
                 }
             }
             
             for dataProd in data.products {
                 if dataProd.price < data.baseDiscount ?? 0 {
-                    errorMessage = "Стартовая скидка не может быть больше чем цена"
+                    errorMessage = ErrorMessages.invalidBaseDiscount
                 }
             }
         } else {
-            errorMessage = "Не удалось получить данные"
+            errorMessage = ErrorMessages.cantGetData
         }
     }
     
     func setupDataForBottomView() {
-        guard let data = data else { return }
+        guard let data = data else {
+            errorMessage = ErrorMessages.cantGetProductsData
+            return
+        }
         totalSumMain = data.products.reduce(0) { $0 + $1.price }
         fixedDiscount = data.baseDiscount ?? 0
         paymentDiscount = data.paymentDiscount ?? 0

@@ -19,6 +19,8 @@
 		11143A112CC251560024C5B7 /* PromocodesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */; };
 		11143A142CC27CF10024C5B7 /* SaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A132CC27CF10024C5B7 /* SaleView.swift */; };
 		11143A172CC51A660024C5B7 /* UIColorProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A162CC51A660024C5B7 /* UIColorProperties.swift */; };
+		1159D60A2CCB6C24001CE40D /* ErrorMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1159D6092CCB6C24001CE40D /* ErrorMessages.swift */; };
+		1159D60F2CCB7658001CE40D /* NewPromocodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1159D60E2CCB7651001CE40D /* NewPromocodeViewController.swift */; };
 		11D4A16B2CC77ED9007589CD /* OrderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D4A16A2CC77ED9007589CD /* OrderViewModel.swift */; };
 		11D4A18D2CCA12C2007589CD /* UIType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11D4A18C2CCA12C2007589CD /* UIType.swift */; };
 /* End PBXBuildFile section */
@@ -38,6 +40,8 @@
 		11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromocodesTableViewCell.swift; sourceTree = "<group>"; };
 		11143A132CC27CF10024C5B7 /* SaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleView.swift; sourceTree = "<group>"; };
 		11143A162CC51A660024C5B7 /* UIColorProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorProperties.swift; sourceTree = "<group>"; };
+		1159D6092CCB6C24001CE40D /* ErrorMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessages.swift; sourceTree = "<group>"; };
+		1159D60E2CCB7651001CE40D /* NewPromocodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPromocodeViewController.swift; sourceTree = "<group>"; };
 		11D4A16A2CC77ED9007589CD /* OrderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderViewModel.swift; sourceTree = "<group>"; };
 		11D4A18C2CCA12C2007589CD /* UIType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -121,13 +125,39 @@
 			children = (
 				11D4A18C2CCA12C2007589CD /* UIType.swift */,
 				11143A162CC51A660024C5B7 /* UIColorProperties.swift */,
+				1159D6092CCB6C24001CE40D /* ErrorMessages.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		1159D60B2CCB7634001CE40D /* NewPromocodeScreenModule */ = {
+			isa = PBXGroup;
+			children = (
+				1159D60C2CCB7641001CE40D /* View */,
+			);
+			path = NewPromocodeScreenModule;
+			sourceTree = "<group>";
+		};
+		1159D60C2CCB7641001CE40D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1159D60D2CCB7646001CE40D /* Controller */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1159D60D2CCB7646001CE40D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				1159D60E2CCB7651001CE40D /* NewPromocodeViewController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		11D4A1602CC77C18007589CD /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				1159D60B2CCB7634001CE40D /* NewPromocodeScreenModule */,
 				11D4A1612CC77C54007589CD /* OrderScreenModule */,
 			);
 			path = Modules;
@@ -265,6 +295,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1159D60F2CCB7658001CE40D /* NewPromocodeViewController.swift in Sources */,
 				11143A142CC27CF10024C5B7 /* SaleView.swift in Sources */,
 				11D4A16B2CC77ED9007589CD /* OrderViewModel.swift in Sources */,
 				111439F32CBFDA3C0024C5B7 /* OrderScreenViewController.swift in Sources */,
@@ -273,6 +304,7 @@
 				111439EF2CBFDA3C0024C5B7 /* AppDelegate.swift in Sources */,
 				11143A092CBFE63C0024C5B7 /* OrderScreenView.swift in Sources */,
 				11D4A18D2CCA12C2007589CD /* UIType.swift in Sources */,
+				1159D60A2CCB6C24001CE40D /* ErrorMessages.swift in Sources */,
 				11143A0E2CC0EC100024C5B7 /* BottomOrderScreenView.swift in Sources */,
 				11143A062CBFDF330024C5B7 /* Order.swift in Sources */,
 				11143A112CC251560024C5B7 /* PromocodesTableViewCell.swift in Sources */,

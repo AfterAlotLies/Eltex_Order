@@ -37,15 +37,20 @@ extension OrderScreenViewController: OrderViewModelDelegate {
         orderScreenView.showOrder(data)
     }
     
-    func showErrorAlert(_ titleError: String, _ messageError: String) {
-        let alert = UIAlertController(title: titleError,
-                                      message: messageError,
+    func showAlert(_ alertTitle: String, _ alertMessage: String) {
+        let alert = UIAlertController(title: alertTitle,
+                                      message: alertMessage,
                                       preferredStyle: .alert)
         let okButton = UIAlertAction(title: Constants.alertOkButtonTitle,
                                      style: .cancel)
         alert.addAction(okButton)
-        if messageError == "Не удалось получить данные" {
-            
+        
+        if alertMessage == ErrorMessages.cantGetProductsData {
+            orderScreenView.showErrorLabel(for: UIType.bottomView)
+        }
+        
+        if alertMessage == ErrorMessages.cantGetData {
+            orderScreenView.showErrorLabel(for: UIType.uiview)
         }
         self.present(alert, animated: true)
     }
@@ -62,6 +67,12 @@ extension OrderScreenViewController: OrderViewModelDelegate {
     
     func didUpdateTotalSum(_ totalSum: Double, totalDiscount: Double) {
         orderScreenView.updateBottomViewUI(totalSum: totalSum, totalDiscount: Int(totalDiscount))
+    }
+    
+    func didHidePromocode(_ data: Order, isActive: Bool) {
+        orderScreenView.showOrder(data)
+        orderScreenView.updateLayoutSubviews()
+        orderScreenView.changeHideButtonTitle(on: isActive)
     }
 }
 
