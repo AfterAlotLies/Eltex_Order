@@ -76,7 +76,7 @@ final class OrderScreenView: UIView {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.borderWidth = 1
         button.layer.borderColor = UIColor.clear.cgColor
-//        button.addTarget(self, action: #selector(<#T##@objc method#>), for: .touchUpInside)
+        button.addTarget(self, action: #selector(addNewPromocodeHandler), for: .touchUpInside)
         return button
     }()
 
@@ -237,8 +237,7 @@ private extension OrderScreenView {
     
     @objc
     func addNewPromocodeHandler() {
-//        let newPromocodeVC = NewPromocodeViewController()
-        
+        viewModel.showNextController()
     }
     
     @objc

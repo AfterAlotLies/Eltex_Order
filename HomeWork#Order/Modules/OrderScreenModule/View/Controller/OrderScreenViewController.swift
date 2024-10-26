@@ -74,6 +74,14 @@ extension OrderScreenViewController: OrderViewModelDelegate {
         orderScreenView.updateLayoutSubviews()
         orderScreenView.changeHideButtonTitle(on: isActive)
     }
+    
+    func showController() {
+        let newPromocodeViewController = NewPromocodeViewController()
+        self.navigationController?.pushViewController(newPromocodeViewController, animated: true)
+        let backItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        backItem.tintColor = .orange
+        self.navigationItem.backBarButtonItem = backItem
+    }
 }
 
 private extension OrderScreenViewController {

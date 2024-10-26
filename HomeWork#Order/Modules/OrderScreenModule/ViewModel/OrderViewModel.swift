@@ -14,6 +14,7 @@ protocol OrderViewModelDelegate: AnyObject {
     func isActiveCellDidChanged(_ index: Int)
     func didUpdateTotalSum(_ totalSum: Double, totalDiscount: Double)
     func didHidePromocode(_ data: Order, isActive: Bool)
+    func showController()
 }
 
 final class OrderViewModel {
@@ -55,6 +56,7 @@ final class OrderViewModel {
     private var totalSumMain: Double = 0.0
     private var activePromocodes: [Order.Promocode] = []
     private var updatedPromocodes: [Order.Promocode] = []
+    private var displayedPromocodes: [Order.Promocode] = []
     private var fixedDiscount: Double = 0.0
     private var paymentDiscount: Double = 0.0
     private var isPromocodesHidden: Bool = false
@@ -63,83 +65,86 @@ final class OrderViewModel {
     
     func setData() {
         let order = (Order(screenTitle: "Промокоды",
-                                        promocodes: [Order.Promocode.init(title: "HELLO",
-                                                                          percent: 5,
-                                                                          endDate: Date(),
-                                                                          info: "Промокод действует на первый заказ в приложении",
-                                                                          active: true),
-                                                     Order.Promocode.init(title: "VESNA23",
-                                                                          percent: 5,
-                                                                          endDate: Date(),
-                                                                          info: "Промокод действует для заказов от 30 000 ₽",
-                                                                          active: false),
-                                                     Order.Promocode.init(title: "4300162112532",
-                                                                          percent: 5,
-                                                                          endDate: Date(),
-                                                                          info: nil,
-                                                                          active: false),
-                                                     Order.Promocode.init(title: "4300162112534",
-                                                                          percent: 5,
-                                                                          endDate: Date(),
-                                                                          info: nil,
-                                                                          active: true),
-                                                     Order.Promocode.init(title: "4300162112531",
-                                                                          percent: 15,
-                                                                          endDate: Date(),
-                                                                          info: nil,
-                                                                          active: true)],
-                                        products: [Order.Product.init(price: 30000.0, title: "Продукты"),
-                                                   Order.Product(price: 5000.0, title: "Chto-to")],
-                                        paymentDiscount: 1000.0,
-                                        baseDiscount: 1000.0))
+                           promocodes: [Order.Promocode.init(title: "HELLO",
+                                                             percent: 5,
+                                                             endDate: Date(),
+                                                             info: "Промокод действует на первый заказ в приложении",
+                                                             active: true),
+                                        Order.Promocode.init(title: "VESNA23",
+                                                             percent: 5,
+                                                             endDate: Date(),
+                                                             info: "Промокод действует для заказов от 30 000 ₽",
+                                                             active: false),
+                                        Order.Promocode.init(title: "4300162112532",
+                                                             percent: 5,
+                                                             endDate: Date(),
+                                                             info: nil,
+                                                             active: false),
+                                        Order.Promocode.init(title: "4300162112534",
+                                                             percent: 5,
+                                                             endDate: Date(),
+                                                             info: nil,
+                                                             active: true),
+                                        Order.Promocode.init(title: "4300162112531",
+                                                             percent: 15,
+                                                             endDate: Date(),
+                                                             info: nil,
+                                                             active: false)],
+                           products: [Order.Product.init(price: 30000.0, title: "Продукты"),
+                                      Order.Product(price: 5000.0, title: "Chto-to")],
+                           paymentDiscount: 1000.0,
+                           baseDiscount: 1000.0))
         self.data = order
         updatedPromocodes = order.promocodes
+        self.displayedPromocodes = updatedPromocodes
         isDataCorrect()
         setupDataForBottomView()
     }
     
     func handleSwitch(_ isOn: Bool, indexPath: Int) {
-        guard let data = data,
-        indexPath < updatedPromocodes.count
-        else { return }
+        guard indexPath < displayedPromocodes.count else { return }
         
-        updatedPromocodes[indexPath].active = isOn
-        if isOn {
-            if countOfChoosenPromocodes < 2 {
-                countOfChoosenPromocodes += 1
-                applyDiscount(data.promocodes[indexPath])
+        let promocode = displayedPromocodes[indexPath]
+        if let updatedIndex = updatedPromocodes.firstIndex(where: { $0.title == promocode.title }) {
+            updatedPromocodes[updatedIndex].active = isOn
+            displayedPromocodes[indexPath].active = isOn
+            if isOn {
+                if countOfChoosenPromocodes < 2 {
+                    countOfChoosenPromocodes += 1
+                    applyDiscount(displayedPromocodes[indexPath])
+                } else {
+                    errorMessage = ErrorMessages.moreThanTwoCurrentActivatedPromocodes
+                    updatedPromocodes[updatedIndex].active = false
+                    displayedPromocodes[indexPath].active = false
+                    isActiveCell = indexPath
+                }
             } else {
-                errorMessage = ErrorMessages.moreThanTwoCurrentActivatedPromocodes
-                updatedPromocodes[indexPath].active = false
-                isActiveCell = indexPath
+                countOfChoosenPromocodes -= 1
+                removeDiscount(displayedPromocodes[indexPath])
             }
-        } else {
-            countOfChoosenPromocodes -= 1
-            removeDiscount(data.promocodes[indexPath])
         }
-    }
-    
-    func setupNextController() {
-        
     }
     
     func hidePromocodesAction() {
         guard var data = data else { return }
-
         if isPromocodesHidden {
-            data.promocodes = updatedPromocodes
+            displayedPromocodes = updatedPromocodes
             isPromocodesHidden = false
         } else {
             let activePromocodes = updatedPromocodes.filter { $0.active }
-            data.promocodes = Array(activePromocodes.prefix(3))
+            displayedPromocodes = Array(activePromocodes.prefix(3))
             isPromocodesHidden = true
         }
         
-        self.data = data
+        data.promocodes = displayedPromocodes
         delegate?.didHidePromocode(data, isActive: isPromocodesHidden)
         recalculateTotalSum()
     }
-
+    
+    func showNextController() {
+        delegate?.showController()
+    }
+    
 }
 
 private extension OrderViewModel {
