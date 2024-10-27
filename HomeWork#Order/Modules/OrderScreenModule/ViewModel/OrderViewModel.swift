@@ -111,6 +111,11 @@ final class OrderViewModel {
                                                                 percent: 4,
                                                                 endDate: Date(),
                                                                 info: nil,
+                                                                active: false),
+                                                Order.Promocode(title: "111",
+                                                                percent: 4,
+                                                                endDate: Date(),
+                                                                info: nil,
                                                                 active: false)],
                            paymentDiscount: 1000.0,
                            baseDiscount: 1000.0))
@@ -123,7 +128,7 @@ final class OrderViewModel {
     
     func handleSwitch(_ isOn: Bool, indexPath: Int) {
         guard indexPath < displayedPromocodes.count else { return }
-        print(countOfChoosenPromocodes)
+
         let promocode = displayedPromocodes[indexPath]
         if let updatedIndex = updatedPromocodes.firstIndex(where: { $0.title == promocode.title }) {
             updatedPromocodes[updatedIndex].active = isOn

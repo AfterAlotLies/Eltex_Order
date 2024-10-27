@@ -9,6 +9,12 @@ import UIKit
 
 final class NewPromocodeView: UIView {
     
+    private enum Constants {
+        static let textFieldLabel = "Введите код"
+        static let activatePromocodeButtonTitle = "Применить"
+        static let errorInputTextFieldLabel = "К сожалению, данного промокода не существует"
+    }
+    
     private lazy var inputTextField: UITextField = {
        let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -26,7 +32,7 @@ final class NewPromocodeView: UIView {
     private lazy var textFieldLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Введите код"
+        label.text = Constants.textFieldLabel
         label.textColor = .lightGray
         label.font = UIFont.systemFont(ofSize: 12)
         return label
@@ -35,7 +41,7 @@ final class NewPromocodeView: UIView {
     private lazy var activatePromocodeButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Применить", for: .normal)
+        button.setTitle(Constants.activatePromocodeButtonTitle, for: .normal)
         button.tintColor = .white
         button.backgroundColor = UIColorProperties.makeAnOrderButtonColorsProperties
         button.layer.cornerRadius = 10
@@ -48,7 +54,7 @@ final class NewPromocodeView: UIView {
     private lazy var errorInputTextFieldLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "К сожалению, данного промокода не существует"
+        label.text = Constants.errorInputTextFieldLabel
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = .red
         label.isHidden = true
@@ -71,7 +77,8 @@ final class NewPromocodeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func showErrorLabel() {
+    func showErrorLabel(_ errorMessage: String) {
+        errorInputTextFieldLabel.text = errorMessage
         errorInputTextFieldLabel.isHidden = false
         buttonToTextFieldMargin.isActive = false
         buttonToLabelMargin.isActive = true

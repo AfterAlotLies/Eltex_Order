@@ -10,6 +10,10 @@ import Foundation
 
 final class NewPromocodeViewController: UIViewController {
     
+    private enum Constants {
+        static let controllerTitle = "Применить промокод"
+    }
+    
     private lazy var newPromocodeView: NewPromocodeView = {
         let view = NewPromocodeView(frame: .zero, viewModel: viewModel)
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -37,8 +41,8 @@ final class NewPromocodeViewController: UIViewController {
 
 extension NewPromocodeViewController: NewPromocodeViewModelDelegate {
     
-    func showError() {
-        newPromocodeView.showErrorLabel()
+    func showError(errorMessage: String) {
+        newPromocodeView.showErrorLabel(errorMessage)
     }
     
     func popToPreviouesController(_ newData: Order) {
@@ -53,7 +57,7 @@ extension NewPromocodeViewController: NewPromocodeViewModelDelegate {
 private extension NewPromocodeViewController {
     
     func setupController() {
-        title = "Применить промокод"
+        title = Constants.controllerTitle
         view.backgroundColor = .white
         
         view.addSubview(newPromocodeView)
