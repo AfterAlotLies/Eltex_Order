@@ -20,13 +20,28 @@ final class OrderScreenViewController: UIViewController {
         return view
     }()
     
-    private let orderViewModel = OrderViewModel()
+    private let orderViewModel: OrderViewModel
+    
+    init(orderViewModel: OrderViewModel) {
+        self.orderViewModel = orderViewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupController()
         orderViewModel.delegate = self
         orderViewModel.setData()
+    }
+    
+    func reloadOrderData(_ data: Order) {
+        orderViewModel.udpateOrderData(data)
+        orderScreenView.updateLayoutSubviews()
     }
     
 }
@@ -75,12 +90,39 @@ extension OrderScreenViewController: OrderViewModelDelegate {
         orderScreenView.changeHideButtonTitle(on: isActive)
     }
     
-    func showController() {
-        let newPromocodeViewController = NewPromocodeViewController()
+    func showController(_ data: Order) {
+        let newPromocodeViewModel = NewPromocodeViewModel(data: data)
+        let newPromocodeViewController = NewPromocodeViewController(viewModel: newPromocodeViewModel)
         self.navigationController?.pushViewController(newPromocodeViewController, animated: true)
         let backItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         backItem.tintColor = .orange
         self.navigationItem.backBarButtonItem = backItem
+    }
+    
+    func showSnackView() {
+        let snackView = SnackView()
+        snackView.translatesAutoresizingMaskIntoConstraints = false
+        snackView.alpha = 0
+        view.addSubview(snackView)
+        
+        NSLayoutConstraint.activate([
+            snackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 26),
+            snackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -26),
+            snackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -26),
+            snackView.heightAnchor.constraint(equalToConstant: 40)
+        ])
+        
+        UIView.animate(withDuration: 0.3, animations: {
+            snackView.alpha = 0.5
+        }) { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                UIView.animate(withDuration: 0.3, animations: {
+                    snackView.alpha = 0
+                }) { _ in
+                    snackView.removeFromSuperview()
+                }
+            }
+        }
     }
 }
 

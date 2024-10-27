@@ -19,7 +19,8 @@ final class NavigationController: UINavigationController {
 private extension NavigationController {
     
     func setupNavigation() {
-        let ordersScreenViewController = OrderScreenViewController()
+        let orderViewModel = OrderViewModel()
+        let ordersScreenViewController = OrderScreenViewController(orderViewModel: orderViewModel)
         viewControllers = [ordersScreenViewController]
     }
 }

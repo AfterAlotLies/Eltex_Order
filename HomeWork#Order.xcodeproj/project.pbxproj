@@ -19,6 +19,8 @@
 		11143A112CC251560024C5B7 /* PromocodesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */; };
 		11143A142CC27CF10024C5B7 /* SaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A132CC27CF10024C5B7 /* SaleView.swift */; };
 		11143A172CC51A660024C5B7 /* UIColorProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A162CC51A660024C5B7 /* UIColorProperties.swift */; };
+		1150F3F12CCD758D00276532 /* NewPromocodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1150F3F02CCD758400276532 /* NewPromocodeViewModel.swift */; };
+		1150F3F32CCE644900276532 /* SnackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1150F3F22CCE643D00276532 /* SnackView.swift */; };
 		1159D60A2CCB6C24001CE40D /* ErrorMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1159D6092CCB6C24001CE40D /* ErrorMessages.swift */; };
 		1159D60F2CCB7658001CE40D /* NewPromocodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1159D60E2CCB7651001CE40D /* NewPromocodeViewController.swift */; };
 		1159D6122CCCC275001CE40D /* NewPromocodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1159D6112CCCC26E001CE40D /* NewPromocodeView.swift */; };
@@ -41,6 +43,8 @@
 		11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromocodesTableViewCell.swift; sourceTree = "<group>"; };
 		11143A132CC27CF10024C5B7 /* SaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleView.swift; sourceTree = "<group>"; };
 		11143A162CC51A660024C5B7 /* UIColorProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorProperties.swift; sourceTree = "<group>"; };
+		1150F3F02CCD758400276532 /* NewPromocodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPromocodeViewModel.swift; sourceTree = "<group>"; };
+		1150F3F22CCE643D00276532 /* SnackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackView.swift; sourceTree = "<group>"; };
 		1159D6092CCB6C24001CE40D /* ErrorMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessages.swift; sourceTree = "<group>"; };
 		1159D60E2CCB7651001CE40D /* NewPromocodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPromocodeViewController.swift; sourceTree = "<group>"; };
 		1159D6112CCCC26E001CE40D /* NewPromocodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPromocodeView.swift; sourceTree = "<group>"; };
@@ -132,10 +136,19 @@
 			path = Enums;
 			sourceTree = "<group>";
 		};
+		1150F3EF2CCD757C00276532 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1150F3F02CCD758400276532 /* NewPromocodeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		1159D60B2CCB7634001CE40D /* NewPromocodeScreenModule */ = {
 			isa = PBXGroup;
 			children = (
 				1159D60C2CCB7641001CE40D /* View */,
+				1150F3EF2CCD757C00276532 /* ViewModel */,
 			);
 			path = NewPromocodeScreenModule;
 			sourceTree = "<group>";
@@ -223,6 +236,7 @@
 				11D4A1672CC77E86007589CD /* TableViewCell */,
 				11143A082CBFE63C0024C5B7 /* OrderScreenView.swift */,
 				11143A0D2CC0EC100024C5B7 /* BottomOrderScreenView.swift */,
+				1150F3F22CCE643D00276532 /* SnackView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -310,6 +324,7 @@
 				11143A142CC27CF10024C5B7 /* SaleView.swift in Sources */,
 				11D4A16B2CC77ED9007589CD /* OrderViewModel.swift in Sources */,
 				111439F32CBFDA3C0024C5B7 /* OrderScreenViewController.swift in Sources */,
+				1150F3F12CCD758D00276532 /* NewPromocodeViewModel.swift in Sources */,
 				11143A172CC51A660024C5B7 /* UIColorProperties.swift in Sources */,
 				11143A0C2CBFEE200024C5B7 /* NavigationController.swift in Sources */,
 				111439EF2CBFDA3C0024C5B7 /* AppDelegate.swift in Sources */,
@@ -318,6 +333,7 @@
 				1159D60A2CCB6C24001CE40D /* ErrorMessages.swift in Sources */,
 				11143A0E2CC0EC100024C5B7 /* BottomOrderScreenView.swift in Sources */,
 				1159D6122CCCC275001CE40D /* NewPromocodeView.swift in Sources */,
+				1150F3F32CCE644900276532 /* SnackView.swift in Sources */,
 				11143A062CBFDF330024C5B7 /* Order.swift in Sources */,
 				11143A112CC251560024C5B7 /* PromocodesTableViewCell.swift in Sources */,
 				111439F12CBFDA3C0024C5B7 /* SceneDelegate.swift in Sources */,

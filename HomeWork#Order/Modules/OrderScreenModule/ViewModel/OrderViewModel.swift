@@ -14,7 +14,8 @@ protocol OrderViewModelDelegate: AnyObject {
     func isActiveCellDidChanged(_ index: Int)
     func didUpdateTotalSum(_ totalSum: Double, totalDiscount: Double)
     func didHidePromocode(_ data: Order, isActive: Bool)
-    func showController()
+    func showController(_ data: Order)
+    func showSnackView()
 }
 
 final class OrderViewModel {
@@ -63,6 +64,15 @@ final class OrderViewModel {
     
     weak var delegate: OrderViewModelDelegate?
     
+    func udpateOrderData(_ data: Order) {
+        self.data = data
+        updatedPromocodes = data.promocodes
+        countOfChoosenPromocodes = 0
+        isDataCorrect()
+        setupDataForBottomView()
+        delegate?.showSnackView()
+    }
+    
     func setData() {
         let order = (Order(screenTitle: "Промокоды",
                            promocodes: [Order.Promocode.init(title: "HELLO",
@@ -84,7 +94,7 @@ final class OrderViewModel {
                                                              percent: 5,
                                                              endDate: Date(),
                                                              info: nil,
-                                                             active: true),
+                                                             active: false),
                                         Order.Promocode.init(title: "4300162112531",
                                                              percent: 15,
                                                              endDate: Date(),
@@ -92,6 +102,16 @@ final class OrderViewModel {
                                                              active: false)],
                            products: [Order.Product.init(price: 30000.0, title: "Продукты"),
                                       Order.Product(price: 5000.0, title: "Chto-to")],
+                           availableForActive: [Order.Promocode.init(title: "123",
+                                                                     percent: 2,
+                                                                     endDate: Date(),
+                                                                     info: nil,
+                                                                     active: false),
+                                                Order.Promocode(title: "321",
+                                                                percent: 4,
+                                                                endDate: Date(),
+                                                                info: nil,
+                                                                active: false)],
                            paymentDiscount: 1000.0,
                            baseDiscount: 1000.0))
         self.data = order
@@ -103,7 +123,7 @@ final class OrderViewModel {
     
     func handleSwitch(_ isOn: Bool, indexPath: Int) {
         guard indexPath < displayedPromocodes.count else { return }
-        
+        print(countOfChoosenPromocodes)
         let promocode = displayedPromocodes[indexPath]
         if let updatedIndex = updatedPromocodes.firstIndex(where: { $0.title == promocode.title }) {
             updatedPromocodes[updatedIndex].active = isOn
@@ -127,22 +147,37 @@ final class OrderViewModel {
     
     func hidePromocodesAction() {
         guard var data = data else { return }
+
         if isPromocodesHidden {
             displayedPromocodes = updatedPromocodes
             isPromocodesHidden = false
         } else {
             let activePromocodes = updatedPromocodes.filter { $0.active }
-            displayedPromocodes = Array(activePromocodes.prefix(3))
+            
+            switch activePromocodes.count {
+                case 2:
+                    let inactivePromocodes = updatedPromocodes.filter { !$0.active }.prefix(1)
+                    displayedPromocodes = Array(activePromocodes.prefix(2)) + Array(inactivePromocodes)
+
+                case 1:
+                    let inactivePromocodes = updatedPromocodes.filter { !$0.active }.prefix(2)
+                    displayedPromocodes = [activePromocodes.first!] + Array(inactivePromocodes)
+
+                default:
+                    displayedPromocodes = Array(updatedPromocodes.prefix(3))
+            }
+            
             isPromocodesHidden = true
         }
-        
         data.promocodes = displayedPromocodes
         delegate?.didHidePromocode(data, isActive: isPromocodesHidden)
         recalculateTotalSum()
     }
     
+    
     func showNextController() {
-        delegate?.showController()
+        guard let data = data else { return }
+        delegate?.showController(data)
     }
     
 }

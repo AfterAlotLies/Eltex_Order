@@ -26,6 +26,7 @@ struct Order {
     var promocodes: [Promocode]
     
     let products: [Product]
+    let availableForActive: [Promocode]?
     let paymentDiscount: Double?
     let baseDiscount: Double?
 }
