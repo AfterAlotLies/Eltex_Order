@@ -8,7 +8,7 @@
 import UIKit
 
 protocol IProductsListView: AnyObject {
-    func didCellTapped()
+    func didCellTapped(selectedCell: Product)
 }
 
 final class ProductsListView: UIView {
@@ -33,8 +33,8 @@ final class ProductsListView: UIView {
         self.viewModel = viewModel
         super.init(frame: frame)
         
-        self.viewModel.onNavigate = { [weak self] in
-            self?.delegate?.didCellTapped()
+        self.viewModel.onNavigate = { [weak self] cellData in
+            self?.delegate?.didCellTapped(selectedCell: cellData)
         }
         
         setupView()
@@ -76,7 +76,9 @@ extension ProductsListView: UITableViewDataSource {
 extension ProductsListView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.showNextScreen()
+        guard let productData = productsModel else { return }
+        let cellData = productData[indexPath.row]
+        viewModel.showNextScreen(selectedCell: cellData)
     }
 }
 

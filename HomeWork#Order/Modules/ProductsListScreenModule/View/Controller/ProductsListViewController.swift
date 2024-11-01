@@ -32,18 +32,17 @@ final class ProductsListViewController: UIViewController {
 
 extension ProductsListViewController: IProductsListView {
     
-    func didCellTapped() {
-        let reviewProductViewController = ReviewProductViewController()
+    func didCellTapped(selectedCell: Product) {
+        let reviewViewModel = ReviewProductViewModel(productData: selectedCell)
+        let reviewProductViewController = ReviewProductViewController(viewModel: reviewViewModel)
         self.navigationController?.pushViewController(reviewProductViewController, animated: true)
+        let backItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        backItem.tintColor = .orange
+        self.navigationItem.backBarButtonItem = backItem
     }
 }
 
 private extension ProductsListViewController {
-    
-    func showNextController() {
-        let reviewProductViewController = ReviewProductViewController()
-        self.navigationController?.pushViewController(reviewProductViewController, animated: true)
-    }
     
     func setupController() {
         view.backgroundColor = .white

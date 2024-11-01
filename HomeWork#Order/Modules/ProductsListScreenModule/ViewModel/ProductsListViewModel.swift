@@ -18,22 +18,26 @@ final class ProductsListViewModel {
     }
     
     var dataDidChanged: (([Product]) -> Void)?
-    var onNavigate: (() -> Void)?
+    var onNavigate: ((Product) -> Void)?
     
     func getData() {
         productsData = [
             Product(imageName: "firstRing",
-                    productName: "Золотое плоское\nобручальное 4 мм"),
+                    productName: "Золотое плоское обручальное кольцо 4 мм",
+                    productSize: 17),
             Product(imageName: "secondRing",
-                    productName: "Золотое плоское\nобручальное 4 мм"),
+                    productName: "Золотое плоское\nобручальное 4 мм",
+                    productSize: 17),
             Product(imageName: "thirdRing",
-                    productName: "Золотое плоское\nобручальное 4 мм"),
+                    productName: "Золотое плоское\nобручальное 4 мм",
+                    productSize: 17),
             Product(imageName: "fourthRing",
-                    productName: "Золотое плоское\nобручальное 4 мм")
+                    productName: "Золотое плоское\nобручальное 4 мм",
+                    productSize: 17)
         ]
     }
     
-    func showNextScreen() {
-        onNavigate?()
+    func showNextScreen(selectedCell: Product) {
+        onNavigate?(selectedCell)
     }
 }
