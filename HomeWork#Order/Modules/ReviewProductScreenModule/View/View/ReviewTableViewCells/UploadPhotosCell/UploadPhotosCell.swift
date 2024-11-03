@@ -19,32 +19,40 @@ final class UploadPhotosCell: UITableViewCell {
         return view
     }()
     
-    private lazy var uploadImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "uploadImage")
-        return imageView
-    }()
-    
-    private lazy var addPhotoVideoLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Добавьте фото или видео"
-        label.font = .systemFont(ofSize: 14)
-        label.textAlignment = .left
-        return label
-    }()
-    
-    private lazy var clickHereLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Нажмите, чтобы выбрать файлы"
-        label.font = .systemFont(ofSize: 12)
-        label.textAlignment = .left
-        return label
+    private lazy var uploadedPhotosCollectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumInteritemSpacing = 1
+        layout.itemSize = CGSize(width: frame.width / 4 - 5, height: 80)
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isScrollEnabled = false
+        collectionView.dataSource = self
+        collectionView.register(UploadedPhotoCell.self, forCellWithReuseIdentifier: UploadedPhotoCell.identifier)
+        collectionView.register(AddPhotoCell.self, forCellWithReuseIdentifier: AddPhotoCell.identifier)
+        return collectionView
     }()
     
     private let contentViewBackgroundColor: UIColor = UIColor(red: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1)
+    
+    private var collectionViewHeightConstraint: NSLayoutConstraint?
+    
+    private var photos: [String] {
+        return viewModel?.uploadedNamesPhotos ?? []
+    }
+    
+    var viewModel: ReviewProductViewModel? {
+        didSet {
+            viewModel?.onPhotosUpdate = { [weak self] in
+                self?.uploadedPhotosCollectionView.reloadData()
+                self?.updateCollectionViewHeight()
+                if let tableView = self?.superview as? UITableView {
+                    tableView.beginUpdates()
+                    tableView.endUpdates()
+                }
+            }
+        }
+    }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -55,6 +63,42 @@ final class UploadPhotosCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func updateCollectionViewHeight() {
+        uploadedPhotosCollectionView.layoutIfNeeded()
+        let height = uploadedPhotosCollectionView.collectionViewLayout.collectionViewContentSize.height
+        collectionViewHeightConstraint?.constant = height
+    }
+
+}
+
+extension UploadPhotosCell: UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if photos.count == 7 {
+            return photos.count
+        } else {
+            return photos.count + 1
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.item == photos.count {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddPhotoCell.identifier, for: indexPath) as? AddPhotoCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.viewModel = viewModel
+            return cell
+        } else {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UploadedPhotoCell.identifier, for: indexPath) as? UploadedPhotoCell else {
+                return UICollectionViewCell()
+            }
+            cell.viewModel = viewModel
+            cell.configureCell(with: photos[indexPath.item], at: indexPath.item)
+            return cell
+        }
+    }
 }
 
 private extension UploadPhotosCell {
@@ -63,15 +107,12 @@ private extension UploadPhotosCell {
         contentView.backgroundColor = .clear
         
         contentView.addSubview(contentCellView)
-        contentCellView.addSubview(uploadImageView)
-        contentCellView.addSubview(addPhotoVideoLabel)
-        contentCellView.addSubview(clickHereLabel)
+        contentCellView.addSubview(uploadedPhotosCollectionView)
         
         setupConstraints()
     }
     
     func setupConstraints() {
-        
         NSLayoutConstraint.activate([
             contentCellView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             contentCellView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
@@ -79,27 +120,15 @@ private extension UploadPhotosCell {
             contentCellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
         
-        NSLayoutConstraint.activate([
-            uploadImageView.widthAnchor.constraint(equalToConstant: 24),
-            uploadImageView.heightAnchor.constraint(equalToConstant: 24),
-            uploadImageView.leadingAnchor.constraint(equalTo: contentCellView.leadingAnchor, constant: 16),
-            uploadImageView.centerYAnchor.constraint(equalTo: contentCellView.centerYAnchor)
-        ])
+        collectionViewHeightConstraint = uploadedPhotosCollectionView.heightAnchor.constraint(equalToConstant: 80)
+        collectionViewHeightConstraint?.isActive = true
         
         NSLayoutConstraint.activate([
-            addPhotoVideoLabel.topAnchor.constraint(equalTo: contentCellView.topAnchor, constant: 16),
-            addPhotoVideoLabel.leadingAnchor.constraint(equalTo: uploadImageView.trailingAnchor, constant: 16),
-            addPhotoVideoLabel.trailingAnchor.constraint(equalTo: contentCellView.trailingAnchor, constant: -16),
-            addPhotoVideoLabel.heightAnchor.constraint(equalToConstant: 20)
+            uploadedPhotosCollectionView.topAnchor.constraint(equalTo: contentCellView.topAnchor, constant: 0),
+            uploadedPhotosCollectionView.leadingAnchor.constraint(equalTo: contentCellView.leadingAnchor, constant: 0),
+            uploadedPhotosCollectionView.bottomAnchor.constraint(equalTo: contentCellView.bottomAnchor, constant: 0),
+            uploadedPhotosCollectionView.trailingAnchor.constraint(equalTo: contentCellView.trailingAnchor, constant: 0)
         ])
         
-        NSLayoutConstraint.activate([
-            clickHereLabel.topAnchor.constraint(equalTo: addPhotoVideoLabel.bottomAnchor, constant: 5),
-            clickHereLabel.leadingAnchor.constraint(equalTo: addPhotoVideoLabel.leadingAnchor),
-            clickHereLabel.trailingAnchor.constraint(equalTo: addPhotoVideoLabel.trailingAnchor),
-            clickHereLabel.bottomAnchor.constraint(equalTo: contentCellView.bottomAnchor, constant: -16)
-        ])
-        
-        clickHereLabel.heightAnchor.constraint(equalTo: addPhotoVideoLabel.heightAnchor).isActive = true
     }
 }

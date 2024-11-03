@@ -40,6 +40,14 @@ final class ProductRatingCell: UITableViewCell {
     
     private let contentViewBackgroundColor: UIColor = UIColor(red: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1)
     
+    var userRating: Int = 0 {
+        didSet {
+            onRatingChange?(userRating)
+        }
+    }
+        
+    var onRatingChange: ((Int) -> Void)?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
@@ -73,6 +81,7 @@ private extension ProductRatingCell {
             contentCellView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             contentCellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
+        
         NSLayoutConstraint.activate([
             productRatingLabel.topAnchor.constraint(equalTo: contentCellView.topAnchor, constant: 16),
             productRatingLabel.leadingAnchor.constraint(equalTo: contentCellView.leadingAnchor, constant: 16),
@@ -88,11 +97,51 @@ private extension ProductRatingCell {
     }
     
     func setRatingImages() {
-        for _ in 0..<5 {
+        for index in 0..<5 {
             let imageView = UIImageView()
-            imageView.image = UIImage(named: "notFillStart")
+            imageView.image = UIImage(named: "notFillStar")
+            imageView.isUserInteractionEnabled = true
+            imageView.tag = index
+            let gesture = UITapGestureRecognizer(target: self, action: #selector(starTapped(_:)))
+            imageView.addGestureRecognizer(gesture)
             ratingStarsImageViewsArray.append(imageView)
             ratingStackView.addArrangedSubview(imageView)
+        }
+    }
+    
+    func updateStars(rating: Int) {
+        for (index, imageView) in ratingStarsImageViewsArray.enumerated() {
+            if index <= rating {
+                imageView.image = UIImage(named: "fillStar")
+            } else {
+                imageView.image = UIImage(named: "notFillStar")
+            }
+        }
+    }
+    
+    func updateRatingLabel() {
+        switch userRating {
+        case 1:
+            productRatingLabel.text = "Ужасно"
+        case 2:
+            productRatingLabel.text = "Плохо"
+        case 3:
+            productRatingLabel.text = "Нормально"
+        case 4:
+            productRatingLabel.text = "Хорошо"
+        case 5:
+            productRatingLabel.text = "Отлично"
+        default:
+            productRatingLabel.text = "Ваша оценка"
+        }
+    }
+    
+    @objc
+    func starTapped(_ sender: UITapGestureRecognizer) {
+        if let imageTapped = sender.view as? UIImageView {
+            updateStars(rating: imageTapped.tag)
+            userRating = imageTapped.tag + 1
+            updateRatingLabel()
         }
     }
 }
