@@ -25,6 +25,7 @@ final class ConfirmReviewCell: UITableViewCell {
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = buttonColor
         button.layer.cornerRadius = 15
+        button.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
         return button
     }()
     
@@ -53,6 +54,9 @@ final class ConfirmReviewCell: UITableViewCell {
     }()
     
     private let buttonColor: UIColor = UIColor(red: 255.0 / 255.0, green: 70.0 / 255.0, blue: 17.0 / 255.0 , alpha: 1)
+    private var isTapped: Bool = false
+    
+    var viewModel: ReviewProductViewModel?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -70,6 +74,12 @@ final class ConfirmReviewCell: UITableViewCell {
 }
 
 private extension ConfirmReviewCell {
+    
+    @objc
+    func confirmButtonTapped() {
+        viewModel?.toggleErrorCell(index: 2)
+    }
+
     
     func setupCell() {
         contentView.addSubview(contentCellView)
