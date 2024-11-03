@@ -9,6 +9,10 @@ import UIKit
 
 final class ProductsListViewController: UIViewController {
     
+    private enum Constants {
+        static let controllerTitle = "Напишите отзыв"
+    }
+    
     private lazy var productsListView: ProductsListView = {
         let view = ProductsListView(frame: .zero, viewModel: viewModel)
         view.delegate = self
@@ -46,7 +50,7 @@ private extension ProductsListViewController {
     
     func setupController() {
         view.backgroundColor = .white
-        title = "Напишите отзыв"
+        title = Constants.controllerTitle
         
         view.addSubview(productsListView)
         

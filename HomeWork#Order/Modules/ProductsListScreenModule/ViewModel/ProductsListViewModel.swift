@@ -23,7 +23,7 @@ final class ProductsListViewModel {
     func getData() {
         productsData = [
             Product(imageName: "firstRing",
-                    productName: "Золотое плоское обручальное кольцо 4 мм",
+                    productName: "Золотое плоское\nобручальное кольцо 4 мм",
                     productSize: 17),
             Product(imageName: "secondRing",
                     productName: "Золотое плоское\nобручальное 4 мм",
