@@ -26,13 +26,13 @@ final class ProductsListViewModel {
                     productName: "Золотое плоское\nобручальное кольцо 4 мм",
                     productSize: 17),
             Product(imageName: "secondRing",
-                    productName: "Золотое плоское\nобручальное 4 мм",
+                    productName: "Золотое плоское\nобручальное кольцо 4 мм",
                     productSize: 17),
             Product(imageName: "thirdRing",
-                    productName: "Золотое плоское\nобручальное 4 мм",
+                    productName: "Золотое плоское\nобручальное кольцо 4 мм",
                     productSize: 17),
             Product(imageName: "fourthRing",
-                    productName: "Золотое плоское\nобручальное 4 мм",
+                    productName: "Золотое плоское\nобручальное кольцо 4 мм",
                     productSize: 17)
         ]
     }
