@@ -22,6 +22,8 @@ final class UserReviewCell: UITableViewCell {
     private lazy var inputTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.returnKeyType = .next
+        textField.delegate = self
         return textField
     }()
     
@@ -39,6 +41,26 @@ final class UserReviewCell: UITableViewCell {
     
     func configureCell(placeholderText: String) {
         inputTextField.placeholder = placeholderText
+    }
+}
+
+extension UserReviewCell: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let tableView = superview as? UITableView, let indexPath = tableView.indexPath(for: self) {
+            if let nextCell = tableView.cellForRow(at: IndexPath(row: indexPath.row + 1, section: indexPath.section)) as? UserReviewCell {
+                nextCell.inputTextField.becomeFirstResponder()
+            } else {
+                textField.resignFirstResponder()
+            }
+        }
+        return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if let tableView = superview as? UITableView, let indexPath = tableView.indexPath(for: self) {
+            (tableView.superview as? ReviewProductView)?.activeIndexPath = indexPath
+        }
     }
 }
 

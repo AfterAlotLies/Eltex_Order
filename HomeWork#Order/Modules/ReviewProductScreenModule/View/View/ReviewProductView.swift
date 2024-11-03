@@ -13,23 +13,31 @@ final class ReviewProductView: UIView {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
+        tableView.delegate = self
+        
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
+        
         tableView.register(ProductInfoCell.self, forCellReuseIdentifier: ProductInfoCell.identifier)
         tableView.register(ProductRatingCell.self, forCellReuseIdentifier: ProductRatingCell.identifier)
         tableView.register(UploadPhotosCell.self, forCellReuseIdentifier: UploadPhotosCell.identifier)
         tableView.register(UserReviewCell.self, forCellReuseIdentifier: UserReviewCell.identifier)
         tableView.register(CheckBoxCell.self, forCellReuseIdentifier: CheckBoxCell.identifier)
         tableView.register(ConfirmReviewCell.self, forCellReuseIdentifier: ConfirmReviewCell.identifier)
+        tableView.register(ClickToAddPhotosCell.self, forCellReuseIdentifier: ClickToAddPhotosCell.identifier)
+        tableView.register(ErrorCell.self, forCellReuseIdentifier: ErrorCell.identifier)
+        
         return tableView
     }()
     
     private let viewModel: ReviewProductViewModel
+    var activeIndexPath: IndexPath?
     
     init(frame: CGRect, viewModel: ReviewProductViewModel) {
         self.viewModel = viewModel
         super.init(frame: frame)
         setupView()
+        setupKeyboardObservers()
     }
     
     @available(*, unavailable)
@@ -64,14 +72,18 @@ extension ReviewProductView: UITableViewDataSource {
             }
             
             cell.selectionStyle = .none
+            cell.onRatingChange = { [weak self] rating in
+                self?.viewModel.updateRating(rating)
+            }
             return cell
 
-        case .productPhotoUpload:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: UploadPhotosCell.identifier, for: indexPath) as? UploadPhotosCell else {
+        case .clickToAddPhoto:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ClickToAddPhotosCell.identifier, for: indexPath) as? ClickToAddPhotosCell else {
                 return UITableViewCell()
             }
             
             cell.selectionStyle = .none
+            
             return cell
 
         case .productUserReview(let textFieldPlaceHolder):
@@ -98,23 +110,132 @@ extension ReviewProductView: UITableViewDataSource {
             }
             
             cell.selectionStyle = .none
+            cell.viewModel = viewModel
             cell.configureUI(with: buttonTitle)
+            return cell
+
+        case .uploadPhotos:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: UploadPhotosCell.identifier, for: indexPath) as? UploadPhotosCell else {
+                return UITableViewCell()
+            }
+            
+            cell.selectionStyle = .none
+            cell.viewModel = viewModel
+            
+            return cell
+
+        case .errorCell:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ErrorCell.identifier, for: indexPath) as? ErrorCell else {
+                return UITableViewCell()
+            }
+            cell.selectionStyle = .none
             return cell
         }
     }
     
 }
 
+extension ReviewProductView: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cellType = viewModel.tableViewCells[indexPath.row]
+        if cellType == .clickToAddPhoto {
+            viewModel.tableViewCells[indexPath.row] = .uploadPhotos
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+    }
+}
+
+extension ReviewProductView: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if let view = touch.view, view is UITextField {
+            return false
+        }
+        return true
+    }
+}
+
 private extension ReviewProductView {
+    
+    func setupKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc
+    func keyboardWillShow(notification: Notification) {
+        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+              let activeIndexPath = activeIndexPath else { return }
+        
+        let keyboardHeight = keyboardFrame.height
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        
+        reviewTableView.contentInset = contentInsets
+        reviewTableView.scrollIndicatorInsets = contentInsets
+        
+        DispatchQueue.main.async {
+            self.reviewTableView.scrollToRow(at: activeIndexPath, at: .middle, animated: true)
+        }
+    }
+    
+    @objc
+    func keyboardWillHide(notification: Notification) {
+        reviewTableView.contentInset = .zero
+        reviewTableView.scrollIndicatorInsets = .zero
+    }
     
     func setupView() {
         addSubview(reviewTableView)
         
         setupConstraints()
+        setupBindings()
+        setupGesture()
+    }
+    
+    func setupGesture() {
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        gesture.cancelsTouchesInView = false
+        gesture.delegate = self
+        reviewTableView.addGestureRecognizer(gesture)
+    }
+    
+    @objc
+    func hideKeyboard() {
+        endEditing(true)
+    }
+    
+    func setupBindings() {
+        viewModel.onUploadPhoto = { [weak self] in
+            self?.viewModel.uploadNewPhoto()
+        }
+        
+        viewModel.onPhotoDelete = { [weak self] index in
+            self?.viewModel.deletePhoto(indexImage: index)
+        }
+        
+        viewModel.onConfirmButtomTap = { [weak self] index in
+            guard let self = self else { return }
+            
+            self.reviewTableView.beginUpdates()
+            if self.viewModel.hasErrorCell {
+                self.reviewTableView.insertRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+            }
+            self.reviewTableView.endUpdates()
+        }
+
+        viewModel.onRatingChanged = { [weak self] index in
+            guard let self = self else { return }
+            
+            self.reviewTableView.beginUpdates()
+            if !self.viewModel.hasErrorCell {
+                self.reviewTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+            }
+            self.reviewTableView.endUpdates()
+        }
     }
     
     func setupConstraints() {
-        
         NSLayoutConstraint.activate([
             reviewTableView.topAnchor.constraint(equalTo: self.topAnchor, constant: 16),
             reviewTableView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
