@@ -18,14 +18,22 @@ final class ReviewProductView: UIView {
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         
-        tableView.register(ProductInfoCell.self, forCellReuseIdentifier: ProductInfoCell.identifier)
-        tableView.register(ProductRatingCell.self, forCellReuseIdentifier: ProductRatingCell.identifier)
-        tableView.register(UploadPhotosCell.self, forCellReuseIdentifier: UploadPhotosCell.identifier)
-        tableView.register(UserReviewCell.self, forCellReuseIdentifier: UserReviewCell.identifier)
-        tableView.register(CheckBoxCell.self, forCellReuseIdentifier: CheckBoxCell.identifier)
-        tableView.register(ConfirmReviewCell.self, forCellReuseIdentifier: ConfirmReviewCell.identifier)
-        tableView.register(ClickToAddPhotosCell.self, forCellReuseIdentifier: ClickToAddPhotosCell.identifier)
-        tableView.register(ErrorCell.self, forCellReuseIdentifier: ErrorCell.identifier)
+        tableView.register(ProductInfoCell.self,
+                           forCellReuseIdentifier: ProductInfoCell.identifier)
+        tableView.register(ProductRatingCell.self,
+                           forCellReuseIdentifier: ProductRatingCell.identifier)
+        tableView.register(UploadPhotosCell.self,
+                           forCellReuseIdentifier: UploadPhotosCell.identifier)
+        tableView.register(UserReviewCell.self,
+                           forCellReuseIdentifier: UserReviewCell.identifier)
+        tableView.register(CheckBoxCell.self,
+                           forCellReuseIdentifier: CheckBoxCell.identifier)
+        tableView.register(ConfirmReviewCell.self,
+                           forCellReuseIdentifier: ConfirmReviewCell.identifier)
+        tableView.register(ClickToAddPhotosCell.self,
+                           forCellReuseIdentifier: ClickToAddPhotosCell.identifier)
+        tableView.register(ErrorCell.self,
+                           forCellReuseIdentifier: ErrorCell.identifier)
         
         return tableView
     }()
@@ -159,8 +167,12 @@ extension ReviewProductView: UIGestureRecognizerDelegate {
 private extension ReviewProductView {
     
     func setupKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow(notification:)),
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide(notification:)),
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     @objc
@@ -207,16 +219,19 @@ private extension ReviewProductView {
     
     func setupBindings() {
         viewModel.onUploadPhoto = { [weak self] in
-            self?.viewModel.uploadNewPhoto()
+            guard let self = self else { return }
+            self.viewModel.uploadNewPhoto()
         }
         
         viewModel.onPhotoDelete = { [weak self] index in
-            self?.viewModel.deletePhoto(indexImage: index)
+            guard let self = self else { return }
+            self.viewModel.deletePhoto(indexImage: index)
         }
         
         viewModel.changeCellInTableView = { [weak self] index in
-            self?.viewModel.changeCell(index: index)
-            self?.reviewTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+            guard let self = self else { return }
+            self.viewModel.changeCell(index: index)
+            self.reviewTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
         }
         
         viewModel.onConfirmButtomTap = { [weak self] index in
