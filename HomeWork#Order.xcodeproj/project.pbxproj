@@ -227,6 +227,7 @@
 		116535C12CD2C34D007FC263 /* ReviewProductScreenModule */ = {
 			isa = PBXGroup;
 			children = (
+				11CDFE8F2CD903DA00E529E4 /* Model */,
 				116535C32CD2C36D007FC263 /* View */,
 				116535C22CD2C366007FC263 /* ViewModel */,
 			);
@@ -278,7 +279,6 @@
 		116535CF2CD36099007FC263 /* ReviewTableViewCells */ = {
 			isa = PBXGroup;
 			children = (
-				116535CC2CD3596E007FC263 /* ReviewCellsTypeEnum */,
 				11ED80C72CD6B319006AE9D8 /* ErrorCell */,
 				11ED80C22CD6AF22006AE9D8 /* ClickToAddPhotosCell */,
 				11ED80A52CD4BBF5006AE9D8 /* ConfirmReviewCell */,
@@ -349,6 +349,14 @@
 				11B89E612CD253A200E57AAC /* ProductsListTableViewCell.swift */,
 			);
 			path = ProductsListTableViewCell;
+			sourceTree = "<group>";
+		};
+		11CDFE8F2CD903DA00E529E4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				116535CC2CD3596E007FC263 /* ReviewCellsTypeEnum */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		11D4A1602CC77C18007589CD /* Modules */ = {
