@@ -92,6 +92,7 @@ extension ReviewProductView: UITableViewDataSource {
             }
             
             cell.selectionStyle = .none
+            cell.viewModel = viewModel
             cell.configureCell(placeholderText: textFieldPlaceHolder)
             return cell
 
@@ -232,6 +233,13 @@ private extension ReviewProductView {
                 self.reviewTableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
             }
             self.reviewTableView.endUpdates()
+        }
+        
+        viewModel.moveToNextField = { [weak self] nextIndexPath in
+            guard let self = self else { return }
+            if let nextCell = self.reviewTableView.cellForRow(at: nextIndexPath) as? UserReviewCell {
+                nextCell.activateTextField()
+            }
         }
     }
     

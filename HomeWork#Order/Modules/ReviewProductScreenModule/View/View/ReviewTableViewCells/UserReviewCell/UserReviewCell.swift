@@ -29,6 +29,8 @@ final class UserReviewCell: UITableViewCell {
     
     private let contentViewBackgroundColor: UIColor = UIColor(red: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1)
     
+    var viewModel: ReviewProductViewModel?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCell()
@@ -42,18 +44,19 @@ final class UserReviewCell: UITableViewCell {
     func configureCell(placeholderText: String) {
         inputTextField.placeholder = placeholderText
     }
+    
+    func activateTextField() {
+        inputTextField.becomeFirstResponder()
+    }
 }
 
 extension UserReviewCell: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let tableView = superview as? UITableView, let indexPath = tableView.indexPath(for: self) {
-            if let nextCell = tableView.cellForRow(at: IndexPath(row: indexPath.row + 1, section: indexPath.section)) as? UserReviewCell {
-                nextCell.inputTextField.becomeFirstResponder()
-            } else {
-                textField.resignFirstResponder()
-            }
+            viewModel?.requestMoveToNextField(from: indexPath)
         }
+        textField.resignFirstResponder()
         return true
     }
     

@@ -11,10 +11,14 @@ final class AddPhotoCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: AddPhotoCell.self)
     
+    private enum Constants {
+        static let uploadImage = UIImage(named: "uploadImage")
+    }
+    
     private lazy var addPhotoButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "uploadImage"), for: .normal)
+        button.setImage(Constants.uploadImage, for: .normal)
         button.addTarget(self, action: #selector(addPhoto), for: .touchUpInside)
         return button
     }()

@@ -124,10 +124,10 @@ private extension UploadPhotosCell {
         collectionViewHeightConstraint?.isActive = true
         
         NSLayoutConstraint.activate([
-            uploadedPhotosCollectionView.topAnchor.constraint(equalTo: contentCellView.topAnchor, constant: 0),
-            uploadedPhotosCollectionView.leadingAnchor.constraint(equalTo: contentCellView.leadingAnchor, constant: 0),
-            uploadedPhotosCollectionView.bottomAnchor.constraint(equalTo: contentCellView.bottomAnchor, constant: 0),
-            uploadedPhotosCollectionView.trailingAnchor.constraint(equalTo: contentCellView.trailingAnchor, constant: 0)
+            uploadedPhotosCollectionView.topAnchor.constraint(equalTo: contentCellView.topAnchor),
+            uploadedPhotosCollectionView.leadingAnchor.constraint(equalTo: contentCellView.leadingAnchor),
+            uploadedPhotosCollectionView.bottomAnchor.constraint(equalTo: contentCellView.bottomAnchor),
+            uploadedPhotosCollectionView.trailingAnchor.constraint(equalTo: contentCellView.trailingAnchor)
         ])
         
     }

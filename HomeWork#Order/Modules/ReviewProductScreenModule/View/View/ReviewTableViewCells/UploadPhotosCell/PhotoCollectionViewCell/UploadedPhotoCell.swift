@@ -11,6 +11,10 @@ final class UploadedPhotoCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: UploadedPhotoCell.self)
     
+    private enum Constants {
+        static let deleteImage = UIImage(named: "deleteImage")
+    }
+    
     private lazy var reviewImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -20,7 +24,7 @@ final class UploadedPhotoCell: UICollectionViewCell {
     private lazy var deletePhotoButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "deleteImage"), for: .normal)
+        button.setImage(Constants.deleteImage, for: .normal)
         button.addTarget(self, action: #selector(deletePhoto), for: .touchUpInside)
         return button
     }()

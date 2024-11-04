@@ -15,14 +15,12 @@ final class ProductsListTableViewCell: UITableViewCell {
     private lazy var productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "secondRing")
         return imageView
     }()
     
     private lazy var productNameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Золотое плоское\nОбручальное кольцо 4 мм"
         label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 14)
         label.textAlignment = .left

@@ -23,10 +23,16 @@ final class ReviewProductViewModel {
     var onConfirmButtomTap: ((Int) -> Void)?
     var onRatingChanged: ((Int) -> Void)?
     var onPhotosUpdate: (() -> Void)?
+    var moveToNextField: ((IndexPath) -> Void)?
         
     init(productData: Product) {
         self.productData = productData
         setupTableViewCellsType()
+    }
+    
+    func requestMoveToNextField(from indexPath: IndexPath) {
+        let nextIndexPath = IndexPath(row: indexPath.row + 1, section: indexPath.section)
+        moveToNextField?(nextIndexPath)
     }
     
     func uploadNewPhoto() {

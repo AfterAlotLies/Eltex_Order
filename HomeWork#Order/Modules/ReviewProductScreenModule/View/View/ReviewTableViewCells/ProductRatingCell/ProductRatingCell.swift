@@ -11,6 +11,17 @@ final class ProductRatingCell: UITableViewCell {
     
     static let identifier: String = String(describing: ProductRatingCell.self)
     
+    private enum Constants {
+        static let productRatingLabelText = "Ваша оценка"
+        static let starNotFilledImage = UIImage(named: "notFillStar")
+        static let starFilledImage = UIImage(named: "fillStar")
+        static let productRatingVeryBadText = "Ужасно"
+        static let productRatingBadText = "Плохо"
+        static let productRatingOkTExt = "Нормально"
+        static let productRatingGoodText = "Хорошо"
+        static let productRatingWellText = "Отлично"
+    }
+    
     private lazy var contentCellView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +34,7 @@ final class ProductRatingCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 14)
-        label.text = "Ваша оценка"
+        label.text = Constants.productRatingLabelText
         return label
     }()
     
@@ -99,7 +110,7 @@ private extension ProductRatingCell {
     func setRatingImages() {
         for index in 0..<5 {
             let imageView = UIImageView()
-            imageView.image = UIImage(named: "notFillStar")
+            imageView.image = Constants.starNotFilledImage
             imageView.isUserInteractionEnabled = true
             imageView.tag = index
             let gesture = UITapGestureRecognizer(target: self, action: #selector(starTapped(_:)))
@@ -112,9 +123,9 @@ private extension ProductRatingCell {
     func updateStars(rating: Int) {
         for (index, imageView) in ratingStarsImageViewsArray.enumerated() {
             if index <= rating {
-                imageView.image = UIImage(named: "fillStar")
+                imageView.image = Constants.starFilledImage
             } else {
-                imageView.image = UIImage(named: "notFillStar")
+                imageView.image = Constants.starNotFilledImage
             }
         }
     }
@@ -122,17 +133,17 @@ private extension ProductRatingCell {
     func updateRatingLabel() {
         switch userRating {
         case 1:
-            productRatingLabel.text = "Ужасно"
+            productRatingLabel.text = Constants.productRatingVeryBadText
         case 2:
-            productRatingLabel.text = "Плохо"
+            productRatingLabel.text = Constants.productRatingBadText
         case 3:
-            productRatingLabel.text = "Нормально"
+            productRatingLabel.text = Constants.productRatingOkTExt
         case 4:
-            productRatingLabel.text = "Хорошо"
+            productRatingLabel.text = Constants.productRatingGoodText
         case 5:
-            productRatingLabel.text = "Отлично"
+            productRatingLabel.text = Constants.productRatingWellText
         default:
-            productRatingLabel.text = "Ваша оценка"
+            productRatingLabel.text = Constants.productRatingLabelText
         }
     }
     
