@@ -141,8 +141,7 @@ extension ReviewProductView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cellType = viewModel.tableViewCells[indexPath.row]
         if cellType == .clickToAddPhoto {
-            viewModel.tableViewCells[indexPath.row] = .uploadPhotos
-            tableView.reloadRows(at: [indexPath], with: .automatic)
+            viewModel.changeCellInTableView?(indexPath.row)
         }
     }
 }
@@ -213,6 +212,11 @@ private extension ReviewProductView {
         
         viewModel.onPhotoDelete = { [weak self] index in
             self?.viewModel.deletePhoto(indexImage: index)
+        }
+        
+        viewModel.changeCellInTableView = { [weak self] index in
+            self?.viewModel.changeCell(index: index)
+            self?.reviewTableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
         }
         
         viewModel.onConfirmButtomTap = { [weak self] index in
