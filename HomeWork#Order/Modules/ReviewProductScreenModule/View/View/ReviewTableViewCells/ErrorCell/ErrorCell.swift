@@ -19,7 +19,7 @@ final class ErrorCell: UITableViewCell {
     private lazy var contentCellView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = contentViewBackgroundColor
+        view.backgroundColor = BackgroundColorsCells.errorBackgroundColor
         view.layer.cornerRadius = 10
         return view
     }()
@@ -40,9 +40,6 @@ final class ErrorCell: UITableViewCell {
         imageView.image = Constants.errorMarkImage
         return imageView
     }()
-    
-    private let contentViewBackgroundColor: UIColor = UIColor(red: 255.0 / 255.0, green: 236.0 / 255.0, blue: 236.0 / 255.0, alpha: 1)
-
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

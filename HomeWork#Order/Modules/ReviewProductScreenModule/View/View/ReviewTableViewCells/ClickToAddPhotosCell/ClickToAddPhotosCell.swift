@@ -20,7 +20,7 @@ final class ClickToAddPhotosCell: UITableViewCell {
     private lazy var contentCellView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = contentViewBackgroundColor
+        view.backgroundColor = BackgroundColorsCells.tableViewCellCustomDefaultColor
         view.layer.cornerRadius = 10
         return view
     }()
@@ -50,8 +50,6 @@ final class ClickToAddPhotosCell: UITableViewCell {
         label.textAlignment = .left
         return label
     }()
-    
-    private let contentViewBackgroundColor: UIColor = UIColor(red: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1)
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

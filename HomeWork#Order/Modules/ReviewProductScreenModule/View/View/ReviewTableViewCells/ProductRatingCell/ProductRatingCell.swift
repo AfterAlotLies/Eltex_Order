@@ -25,7 +25,7 @@ final class ProductRatingCell: UITableViewCell {
     private lazy var contentCellView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = contentViewBackgroundColor
+        view.backgroundColor = BackgroundColorsCells.tableViewCellCustomDefaultColor
         view.layer.cornerRadius = 10
         return view
     }()
@@ -48,8 +48,6 @@ final class ProductRatingCell: UITableViewCell {
     }()
     
     private var ratingStarsImageViewsArray: [UIImageView] = []
-    
-    private let contentViewBackgroundColor: UIColor = UIColor(red: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1)
     
     var userRating: Int = 0 {
         didSet {

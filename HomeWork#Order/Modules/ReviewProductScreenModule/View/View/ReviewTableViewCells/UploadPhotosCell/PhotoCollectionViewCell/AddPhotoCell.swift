@@ -23,8 +23,6 @@ final class AddPhotoCell: UICollectionViewCell {
         return button
     }()
     
-    private let contentViewBackgroundColor: UIColor = UIColor(red: 246.0 / 255.0, green: 246.0 / 255.0, blue: 246.0 / 255.0, alpha: 1)
-    
     var viewModel: ReviewProductViewModel?
     
     override init(frame: CGRect) {
@@ -47,7 +45,7 @@ private extension AddPhotoCell {
     
     func setupCell() {
         contentView.addSubview(addPhotoButton)
-        contentView.backgroundColor = contentViewBackgroundColor
+        contentView.backgroundColor = BackgroundColorsCells.tableViewCellCustomDefaultColor
         contentView.layer.cornerRadius = 10
         
         setupConstraints()
