@@ -45,7 +45,6 @@ private extension AddPhotoCell {
         viewModel?.onUploadPhoto?()
     }
     
-    
     func setupCell() {
         contentView.addSubview(addPhotoButton)
         contentView.backgroundColor = contentViewBackgroundColor

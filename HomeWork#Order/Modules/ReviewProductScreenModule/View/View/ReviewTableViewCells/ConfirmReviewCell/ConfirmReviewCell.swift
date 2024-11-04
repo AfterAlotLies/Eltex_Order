@@ -79,7 +79,6 @@ private extension ConfirmReviewCell {
     func confirmButtonTapped() {
         viewModel?.toggleErrorCell(index: 2)
     }
-
     
     func setupCell() {
         contentView.addSubview(contentCellView)
