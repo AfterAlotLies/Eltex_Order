@@ -11,6 +11,12 @@ final class ClickToAddPhotosCell: UITableViewCell {
     
     static let identifier: String = String(describing: ClickToAddPhotosCell.self)
     
+    private enum Constants {
+        static let uploadImage = UIImage(named: "uploadImage")
+        static let addPhotoVideoLabelText = "Добавьте фото или видео"
+        static let clickHereLabelText = "Нажмите, чтобы выбрать файлы"
+    }
+    
     private lazy var contentCellView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -22,7 +28,7 @@ final class ClickToAddPhotosCell: UITableViewCell {
     private lazy var uploadImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "uploadImage")
+        imageView.image = Constants.uploadImage
         imageView.isUserInteractionEnabled = true
         return imageView
     }()
@@ -30,7 +36,7 @@ final class ClickToAddPhotosCell: UITableViewCell {
     private lazy var addPhotoVideoLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Добавьте фото или видео"
+        label.text = Constants.addPhotoVideoLabelText
         label.font = .systemFont(ofSize: 14)
         label.textAlignment = .left
         return label
@@ -39,7 +45,7 @@ final class ClickToAddPhotosCell: UITableViewCell {
     private lazy var clickHereLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Нажмите, чтобы выбрать файлы"
+        label.text = Constants.clickHereLabelText
         label.font = .systemFont(ofSize: 12)
         label.textAlignment = .left
         return label

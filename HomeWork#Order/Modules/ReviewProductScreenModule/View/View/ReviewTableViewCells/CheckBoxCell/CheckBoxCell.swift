@@ -11,6 +11,11 @@ final class CheckBoxCell: UITableViewCell {
     
     static let identifier: String = String(describing: CheckBoxCell.self)
     
+    private enum Constants {
+        static let offCheckBoxImage = UIImage(named: "offCheckbox")
+        static let onCheckBoxImage = UIImage(named: "onCheckbox")
+    }
+    
     private lazy var contentCellView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +28,7 @@ final class CheckBoxCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.isUserInteractionEnabled = true
-        imageView.image = UIImage(named: "offCheckbox")
+        imageView.image = Constants.offCheckBoxImage
         let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(checkBoxTapped))
         imageView.addGestureRecognizer(gestureRecognizer)
         return imageView
@@ -59,10 +64,10 @@ private extension CheckBoxCell {
     @objc
     func checkBoxTapped() {
         if isOnCheckBox {
-            checkBox.image = UIImage(named: "offCheckbox")
+            checkBox.image = Constants.offCheckBoxImage
             isOnCheckBox.toggle()
         } else {
-            checkBox.image = UIImage(named: "onCheckbox")
+            checkBox.image = Constants.onCheckBoxImage
             isOnCheckBox.toggle()
         }
     }
@@ -95,7 +100,6 @@ private extension CheckBoxCell {
             checkBoxTitleLabel.leadingAnchor.constraint(equalTo: checkBox.trailingAnchor, constant: 16),
             checkBoxTitleLabel.trailingAnchor.constraint(equalTo: contentCellView.trailingAnchor, constant: -16),
             checkBoxTitleLabel.bottomAnchor.constraint(equalTo: contentCellView.bottomAnchor, constant: -8),
-//            checkBoxTitleLabel.heightAnchor.constraint(equalToConstant: 30)
         ])
     }
 }

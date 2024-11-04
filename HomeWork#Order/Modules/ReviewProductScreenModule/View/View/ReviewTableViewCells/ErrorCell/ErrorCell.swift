@@ -11,6 +11,11 @@ final class ErrorCell: UITableViewCell {
     
     static let identifier: String = String(describing: ErrorCell.self)
     
+    private enum Constants {
+        static let errorLabelText = "Для продолжения поставьте оценку\nтовару"
+        static let errorMarkImage = UIImage(named: "errorMark")
+    }
+    
     private lazy var contentCellView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -24,7 +29,7 @@ final class ErrorCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 14)
         label.numberOfLines = 2
-        label.text = "Для продолжения поставьте оценку\nтовару"
+        label.text = Constants.errorLabelText
         label.textColor = .red
         return label
     }()
@@ -32,7 +37,7 @@ final class ErrorCell: UITableViewCell {
     private lazy var errorMarkImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(named: "errorMark")
+        imageView.image = Constants.errorMarkImage
         return imageView
     }()
     
