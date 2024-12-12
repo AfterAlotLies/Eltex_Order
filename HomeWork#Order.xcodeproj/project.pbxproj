@@ -217,8 +217,8 @@
 		1146D69D2D0B67BB006D8BF9 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				1146D69E2D0B67BE006D8BF9 /* Controller */,
 				1146D69F2D0B67C3006D8BF9 /* View */,
+				1146D69E2D0B67BE006D8BF9 /* Controller */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -245,6 +245,13 @@
 				1146D6A72D0B6FCF006D8BF9 /* ButtonsIdentifier.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		1146D6A92D0B774D006D8BF9 /* MakeOrderScreenModule */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MakeOrderScreenModule;
 			sourceTree = "<group>";
 		};
 		1150F3EF2CCD757C00276532 /* ViewModel */ = {
@@ -513,6 +520,7 @@
 		11D4A1602CC77C18007589CD /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				1146D6A92D0B774D006D8BF9 /* MakeOrderScreenModule */,
 				1146D69B2D0B67AA006D8BF9 /* StartScreenModule */,
 				11844F532D01B9B300826535 /* CancelOrderScreenModule */,
 				116535C12CD2C34D007FC263 /* ReviewProductScreenModule */,
