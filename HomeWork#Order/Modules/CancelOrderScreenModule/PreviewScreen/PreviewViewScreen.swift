@@ -18,12 +18,6 @@ struct PreviewViewScreen: View {
                         .navigationTitle("")
                         .navigationBarTitleDisplayMode(.inline)
                 }
-                
-                NavigationLink {
-                    Text("Containers Order Screen")
-                } label: {
-                    Text("Move to Containers Order Screen")
-                }
             }
             .padding()
         }

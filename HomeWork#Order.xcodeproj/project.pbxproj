@@ -19,6 +19,10 @@
 		11143A112CC251560024C5B7 /* PromocodesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */; };
 		11143A142CC27CF10024C5B7 /* SaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A132CC27CF10024C5B7 /* SaleView.swift */; };
 		11143A172CC51A660024C5B7 /* UIColorProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11143A162CC51A660024C5B7 /* UIColorProperties.swift */; };
+		1146D6A12D0B67D8006D8BF9 /* StartScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1146D6A02D0B67D3006D8BF9 /* StartScreenViewController.swift */; };
+		1146D6A32D0B67FD006D8BF9 /* StartScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1146D6A22D0B67F8006D8BF9 /* StartScreenView.swift */; };
+		1146D6A52D0B6F0D006D8BF9 /* StartScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1146D6A42D0B6F09006D8BF9 /* StartScreenViewModel.swift */; };
+		1146D6A82D0B6FD3006D8BF9 /* ButtonsIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1146D6A72D0B6FCF006D8BF9 /* ButtonsIdentifier.swift */; };
 		1150F3F12CCD758D00276532 /* NewPromocodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1150F3F02CCD758400276532 /* NewPromocodeViewModel.swift */; };
 		1150F3F32CCE644900276532 /* SnackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1150F3F22CCE643D00276532 /* SnackView.swift */; };
 		1159D60A2CCB6C24001CE40D /* ErrorMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1159D6092CCB6C24001CE40D /* ErrorMessages.swift */; };
@@ -69,6 +73,10 @@
 		11143A102CC251560024C5B7 /* PromocodesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromocodesTableViewCell.swift; sourceTree = "<group>"; };
 		11143A132CC27CF10024C5B7 /* SaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaleView.swift; sourceTree = "<group>"; };
 		11143A162CC51A660024C5B7 /* UIColorProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorProperties.swift; sourceTree = "<group>"; };
+		1146D6A02D0B67D3006D8BF9 /* StartScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreenViewController.swift; sourceTree = "<group>"; };
+		1146D6A22D0B67F8006D8BF9 /* StartScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreenView.swift; sourceTree = "<group>"; };
+		1146D6A42D0B6F09006D8BF9 /* StartScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreenViewModel.swift; sourceTree = "<group>"; };
+		1146D6A72D0B6FCF006D8BF9 /* ButtonsIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsIdentifier.swift; sourceTree = "<group>"; };
 		1150F3F02CCD758400276532 /* NewPromocodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPromocodeViewModel.swift; sourceTree = "<group>"; };
 		1150F3F22CCE643D00276532 /* SnackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackView.swift; sourceTree = "<group>"; };
 		1159D6092CCB6C24001CE40D /* ErrorMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessages.swift; sourceTree = "<group>"; };
@@ -186,6 +194,57 @@
 				1159D6092CCB6C24001CE40D /* ErrorMessages.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		1146D69B2D0B67AA006D8BF9 /* StartScreenModule */ = {
+			isa = PBXGroup;
+			children = (
+				1146D6A62D0B6FCA006D8BF9 /* Model */,
+				1146D69D2D0B67BB006D8BF9 /* View */,
+				1146D69C2D0B67B2006D8BF9 /* ViewModel */,
+			);
+			path = StartScreenModule;
+			sourceTree = "<group>";
+		};
+		1146D69C2D0B67B2006D8BF9 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				1146D6A42D0B6F09006D8BF9 /* StartScreenViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		1146D69D2D0B67BB006D8BF9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1146D69E2D0B67BE006D8BF9 /* Controller */,
+				1146D69F2D0B67C3006D8BF9 /* View */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1146D69E2D0B67BE006D8BF9 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				1146D6A02D0B67D3006D8BF9 /* StartScreenViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		1146D69F2D0B67C3006D8BF9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				1146D6A22D0B67F8006D8BF9 /* StartScreenView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		1146D6A62D0B6FCA006D8BF9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				1146D6A72D0B6FCF006D8BF9 /* ButtonsIdentifier.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		1150F3EF2CCD757C00276532 /* ViewModel */ = {
@@ -454,6 +513,7 @@
 		11D4A1602CC77C18007589CD /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				1146D69B2D0B67AA006D8BF9 /* StartScreenModule */,
 				11844F532D01B9B300826535 /* CancelOrderScreenModule */,
 				116535C12CD2C34D007FC263 /* ReviewProductScreenModule */,
 				11B89E572CD24E0B00E57AAC /* ProductsListScreenModule */,
@@ -673,10 +733,13 @@
 				11143A0C2CBFEE200024C5B7 /* NavigationController.swift in Sources */,
 				116535C92CD2C96F007FC263 /* ReviewProductView.swift in Sources */,
 				116535CE2CD35983007FC263 /* ReviewCellsType.swift in Sources */,
+				1146D6A12D0B67D8006D8BF9 /* StartScreenViewController.swift in Sources */,
 				11C4BC8E2D02467E0047BECD /* WarningView.swift in Sources */,
+				1146D6A52D0B6F0D006D8BF9 /* StartScreenViewModel.swift in Sources */,
 				11ED809E2CD414E3006AE9D8 /* UploadPhotosCell.swift in Sources */,
 				111439EF2CBFDA3C0024C5B7 /* AppDelegate.swift in Sources */,
 				11B89E622CD253A200E57AAC /* ProductsListTableViewCell.swift in Sources */,
+				1146D6A82D0B6FD3006D8BF9 /* ButtonsIdentifier.swift in Sources */,
 				11ED809A2CD40EAE006AE9D8 /* ProductRatingCell.swift in Sources */,
 				11CDFE922CD9051B00E529E4 /* BackgroundColorsCells.swift in Sources */,
 				116535CB2CD2C9B6007FC263 /* ReviewProductViewModel.swift in Sources */,
@@ -700,6 +763,7 @@
 				1159D6122CCCC275001CE40D /* NewPromocodeView.swift in Sources */,
 				1150F3F32CCE644900276532 /* SnackView.swift in Sources */,
 				11143A062CBFDF330024C5B7 /* Order.swift in Sources */,
+				1146D6A32D0B67FD006D8BF9 /* StartScreenView.swift in Sources */,
 				11ED80AA2CD4E0FB006AE9D8 /* UploadedPhotoCell.swift in Sources */,
 				11ED80C92CD6B327006AE9D8 /* ErrorCell.swift in Sources */,
 				11143A112CC251560024C5B7 /* PromocodesTableViewCell.swift in Sources */,
