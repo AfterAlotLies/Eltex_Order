@@ -12,21 +12,16 @@ final class NavigationController: UINavigationController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupProductsListNavigation()
-//        setupNavigation()
+        setupNavigation()
     }
 }
 
 private extension NavigationController {
     
-    func setupProductsListNavigation() {
-        let productsListController = ProductsListViewController()
-        viewControllers = [productsListController]
-    }
-    
     func setupNavigation() {
-        let orderViewModel = OrderViewModel()
-        let ordersScreenViewController = OrderScreenViewController(orderViewModel: orderViewModel)
-        viewControllers = [ordersScreenViewController]
+        let startVM = StartScreenViewModel()
+        let startScreen = StartScreenViewController(viewModel: startVM)
+        viewControllers = [startScreen]
     }
 }
+
