@@ -52,9 +52,11 @@ private extension StartScreenViewController {
         case .defaultType:
             break
         case .enterPromocode:
-            let viewModel = NewPromocodeViewModel(data: nil)
-            let newPromocodeScreen = NewPromocodeViewController(viewModel: viewModel)
-            self.navigationController?.pushViewController(newPromocodeScreen, animated: true)
+            let viewModel = OrderViewModel()
+            let orderScreen = OrderScreenViewController(orderViewModel: viewModel)
+//            let viewModel = NewPromocodeViewModel(data: nil)
+//            let newPromocodeScreen = NewPromocodeViewController(viewModel: viewModel)
+            self.navigationController?.pushViewController(orderScreen, animated: true)
         case .review:
             let productsScreen = ProductsListViewController()
             self.navigationController?.pushViewController(productsScreen, animated: true)
@@ -62,7 +64,10 @@ private extension StartScreenViewController {
             let cancelOrderScreen = CancelOrderView()
             self.navigationController?.pushViewController(UIHostingController(rootView: cancelOrderScreen), animated: true)
         case .order:
-            break
+            let makeOrderScreen = MakeOrderView()
+            self.navigationController?.pushViewController(UIHostingController(rootView: makeOrderScreen), animated: true)
+            self.navigationController?.navigationBar.topItem?.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            self.navigationController?.navigationBar.topItem?.backBarButtonItem?.tintColor = UIColor.orange
         }
     }
     
